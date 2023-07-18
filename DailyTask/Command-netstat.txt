@@ -1,0 +1,125 @@
+#Help
+netstat -h 
+
+#To list all listening ports, using both TCP and UDP
+$ netstat -a
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+tcp     2880      0 rhel.test:39150         a173-222-212-251.:https ESTABLISHED
+
+#List only TCP port connections 
+$netstat -at 
+
+#List only UDP port connections
+$netstat -au
+           
+
+#List all actively listening ports
+$netstat -l
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+tcp        0      0 0.0.0.0:hostmon         0.0.0.0:*               LISTEN     
+tcp        0      0 0.0.0.0:sunrpc          0.0.0.0:*               LISTEN    
+udp        0      0 0.0.0.0:35709           0.0.0.0:*                          
+udp        0      0 rhel.test:domain        0.0.0.0:*                         
+Active UNIX domain sockets (only servers)
+Proto RefCnt Flags       Type       State         I-Node   Path
+unix  2      [ ACC ]     STREAM     LISTENING     38124    @/tmp/.ICE-unix/2276
+unix  2      [ ACC ]     STREAM     LISTENING     41812    /tmp/.X11-unix/X0
+unix  2      [ ACC ]     STREAM     LISTENING     38125    /tmp/.ICE-unix/2276
+unix  2      [ ACC ]     STREAM     LISTENING     41743    /tmp/.ICE-unix/2613
+
+#List only TCP listening ports
+$netstat -lt 
+
+#List only UDP listening ports
+$netstat -lu
+
+
+#The combination of netstat and grep are very used for finding the number of listening programs on a port, such as http
+$netstat -ap | grep http
+
+$netstat -ap | grep ssh 
+
+#Find the progress running on the specified port
+$netstat -an | grep ':22'
+
+
+#Pull and view network statistics sorted by protocol
+$netstat -s 
+Ip:
+    Forwarding: 1
+    64919 total packets received
+    1 with invalid addresses
+    0 forwarded
+    0 incoming packets discarded
+    64877 incoming packets delivered
+    62971 requests sent out
+    4 dropped because of missing route
+Icmp:
+    0 ICMP messages received
+    0 input ICMP message failed
+    ICMP input histogram:
+    0 ICMP messages sent
+    0 ICMP messages failed
+    ICMP output histogram:
+Tcp:
+    31 active connection openings
+    0 passive connection openings
+    0 failed connection attempts
+    1 connection resets received
+    0 connections established
+    64704 segments received
+    62779 segments sent out
+    0 segments retransmitted
+    0 bad segments received
+    33 resets sent
+......
+
+
+#Pull and view network statistics sorted by TCP protocol
+$netstat -st 
+
+#Pull and view network statistics sorted by UDP protocol 
+$netstat -su
+
+
+
+#Pull the raw statistics 
+$netstat --statistics --raw
+Ip:
+    Forwarding: 1
+    68789 total packets received
+    1 with invalid addresses
+    0 forwarded
+    0 incoming packets discarded
+    68727 incoming packets delivered
+    66762 requests sent out
+    4 dropped because of missing route
+Icmp:
+    0 ICMP messages received
+    0 input ICMP message failed
+    ICMP input histogram:
+    0 ICMP messages sent
+    0 ICMP messages failed
+    ICMP output histogram:
+UdpLite:
+IpExt:
+    InMcastPkts: 29
+    OutMcastPkts: 35
+    InOctets: 348032479
+    OutOctets: 3070589
+    InMcastOctets: 3098
+    OutMcastOctets: 3338
+    InNoECTPkts: 303413
+
+
+    
+
+
+
+
+
+
+
+
