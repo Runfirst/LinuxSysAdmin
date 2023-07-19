@@ -1,0 +1,22 @@
+#Systemctl is a Linux command-line utility to control and manage systemd and services.
+
+#To view the unit files available in the system, you can list the files in /lib/systemd/system or /etc/systemd/system.
+#Use systemctl to show the units available in the system.
+
+$systemctl list-units 
+
+
+
+#To filter only specific unit files, use the --type=[unit-type] option.
+#show service units files
+
+$systemctl list-units --type=service
+$systemctl --type=service 
+UNIT                      LOAD     ACTIVE   SUB      DESCRIPTION
+accounts-daemon.service   loaded   active   running  Accounts Service 
+
+
+
+
+
+

@@ -34,6 +34,29 @@ if ! grep "TMOUT=600" /etc/profile &> /dev/null; then
 fi
 
 #forbit root account to login
-sed -i 's/$PermitRootLogin'
+sed -i 's/#PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+
+#Set the maximum number of open files
+if ! grep "* soft nofile 65535" /etc/security/limits.conf &>/dev/null; then
+    cat >> /etc/security/limits.conf << EOF
+    * soft nofile 65535
+    * hard nofile 65535
+EOF
+fi 
+
+#Optimise System Kernel
+cat >> /etc/sysctl.conf << EOF
+net.ipv4.tcp_syncookies = 1
+net.ipv4.tcp_max_tw_buckets = 20480
+net.ipv4.tcp_max_syn_bucklog = 20480
+net.core.netdev_max_backlog = 262144
+net.ipv4.tcp_fin_timeout = 20
+EOF
+
+
+#Reduce SWAP usage
+echo "0" > /proc/sys/vm/swappiness
+
+
 
 
