@@ -114,6 +114,8 @@ IpExt:
     InNoECTPkts: 303413
 
 
+#View the remote IP which is connecting to Local
+$netstat -atn | awk '{print $5}' | awk '{print $1}' | sort -nr |uniq -c 
     
 
 

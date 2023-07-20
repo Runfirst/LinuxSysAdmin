@@ -13,6 +13,35 @@ $systemctl --type=service
 UNIT                      LOAD     ACTIVE   SUB      DESCRIPTION
 accounts-daemon.service   loaded   active   running  Accounts Service 
 
+#Filter the units by their states
+$systemctl list-units -state=inactive
+
+#View the entries and configuration in a unit file, tell systemd to call the cat command and unit's name
+$systemctl cat plymouth
+
+
+#Managing Services with systemctl 
+#How to start, stop, reload and restart services 
+$systemctl start nginx
+$systemctl stop nginx 
+$systemctl reload nginx 
+$systemctl restart nginx
+
+#How to check service Status
+$systemctl status nginx 
+
+#How to enable service
+$systemctl enable nginx
+
+#How to disable service 
+$systemctl disable nginx 
+
+
+
+
+
+
+
 
 
 
