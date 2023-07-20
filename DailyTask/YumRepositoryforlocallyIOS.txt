@@ -1,0 +1,48 @@
+#1:Dowwnload a DVD version of your chosen Rhel Version (RHEL7.9.iso) and copied it over to a location on your server.
+
+#2:Mount the RHEL installation ISO to a directory like /mnt/disc
+$mkdir -p /mnt/disc 
+$mount -o loop RHEL7.9.iso /mnt/disc 
+
+#3:If you use DVD media, you can mount like below.
+$mkdir -p /mnt/disc 
+$mount /dev/sr0 /mnt/disc 
+
+#4:Copy the media.repo file from the root of the mounted directory to /etc/yum.repos.d/.
+#And set the permissions to 0644 or another similar permissions set.
+$cp /mnt/disc/media.repo /etc/yum.repos.d/rhel7dvd.repo
+$chmod 644 /etc/yum.repos.d/rhel7dvd.repo
+
+#5:Edit the new repo file, changing the "gpgcheck=0" setting to 1;
+#And adding the following 3 lines:
+$vim /etc/yum.repos.d/rhel7dvd.repo
+enabled=1
+baseurl=file:///mnt/disc/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+
+#6:In the end, the new repo file could look like the following
+[InstallMedia]
+name=DVD for Red Hat Enterprise Linux 7.9 Server
+mediaid=1359576196.686790
+metadata_expire=-1
+gpgcheck=1
+cost=500
+enabled=1
+baseurl=file:///mnt/disc/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+
+#7:Chear the cache and check whether you can get the packages list from the DVD repo 
+$yum clean all
+$yum repolist enabled
+
+#8:It should look like the following if no other repository is enabled.
+#To avoid any corruption its recommend to disable any non-RedHat repositories.
+$yum repolist enabled
+Loaded plugins: product-id, search-disabled-repos, subscription-manager
+This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register.
+repo id                                         repo name                                                                     
+InstallMedia                                    Red Hat Enterprise Linux 7.9
+repolist: 5,229
+
+#9:If no errors are returned, the following can be used to update::
+$yum update
