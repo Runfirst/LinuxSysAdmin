@@ -1,2 +1,53 @@
 #If you maintain multiple Redhat Linux Servers in your local network and want to save Internet bandwidth or speed up the downloading of the same remote repository packages over and over again, or are within a very restrictive network environment where access to any remote Redhat repository is blocked for your clients, you might want to consider running your own YUM repository. Having your own repository is also an excellent solution if you want to roll our a few custom or unofficial RPM packages (For example in-house configuration files or programs) to your local crowd or if your just want to create an official Rehat repository mirror site.
 
+#1.Log in as root on your server, and disable firewalld
+$systemctl stop firewalld
+$systemctl disable firewalld
+$setenforce 0
+$vim /etc/selinux/config
+SELINUX=disabled
+
+
+#2.Download nginx 1.18.0
+$wget http://nginx.org/download/nginx-1.18.0.tar.gz
+
+
+#3.Install dependency packages
+$yum -y install gcc pcre-devel openssl-devel
+
+
+#4.Create a nginx user, which is not allowed to login system
+$useradd -s /sbin/nologin nginx
+
+
+#5.Uncompress and install the nginx to folder /home/application/nignx
+$mkdir /home/application/nginx
+$tar -xf nginx-1.18.0.tar.gz
+$cd nginx-1.18.0
+$./configure --prefix=/home/application/nginx --user=nginx --group=nginx --with-http_ssl_module --with-http_stub_status_module --with-stream --with-http_gzip_static_module --with-pcre
+#Compile and install
+$make && make install
+
+#6.Create a folder for yum repository
+$mkdir -p /home/application/nginx-yum
+
+
+#7.Modify the nginx configuration, and set the port as 8899
+$vim /home/application/nginx/conf/nginx.conf
+
+worker_progresses 1;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    include         mime.types;
+    default_type    application/octet-stream;
+    sendfile        on;
+    
+}
+
+
+
+
