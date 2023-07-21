@@ -4,6 +4,11 @@
 $mkdir -p /mnt/disc 
 $mount -o loop RHEL7.9.iso /mnt/disc 
 
+#After successful mount, use "df -h" to check 
+$df -h 
+...
+/dev/loop0      9.3G    9.3G    0   100%    /local-yum 
+
 #3:If you use DVD media, you can mount like below.
 $mkdir -p /mnt/disc 
 $mount /dev/sr0 /mnt/disc 
