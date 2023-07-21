@@ -1,0 +1,19 @@
+#List the Zombie Progress
+$ps -al | gawk '{print $2, $4}' | grep Z 
+
+#How to match email address
+$cat index.html | egrep -o "[A-Za-z0-9._]+@[A-Za-z0-9.]+\.[a-zA-Z]{2,4}" > ans.txt
+
+#List the open ports and the progresses that are running on these ports
+$lsof -i 
+
+#remove the blank line
+$sed '/^$/d' file
+
+
+
+
+
+
+
+
