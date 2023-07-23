@@ -45,8 +45,59 @@ http {
     include         mime.types;
     default_type    application/octet-stream;
     sendfile        on;
-    
+    keepalive_timeout   65;
+    server {
+        listen      8899;
+        server_name localhost;
+        location / {
+            autoindex   on;
+            root        /home/application/nginx-yum/;
+        }
+    }
 }
+
+
+#8.Check the nginx configuration
+$/home/application/nginx/sbin/nginx -t 
+nginx: the configuration file /home/application/nginx/conf/nginx.conf syntax is ok 
+nginx: configuration file /home/application/nginx/conf/nginx.conf test is succssful
+
+
+#9.Mount the iso file to the temporary folder, then copy it to yum-repository folder
+$mkdir local-yum 
+$mount -o loop CentOS-7-x86_64-DVD-1810.iso /local-yum 
+$cd local-yum
+$cp -rp * /home/application/nginx-yum/
+$ls -l /home/application/nginx-yum/ 
+total 4669768
+....
+
+
+#10.Start nginx, and check the port status. And now we can open browser to open the yum repository.
+$/home/application/nginx/sbin/nginx 
+$netstat -ntlup
+...
+tcp     0   0   0.0.0.0:8899    0.0.0.0:*   LISTEN  41103/nginx: master
+
+
+#11.Create a yum configuration: create a nginx-yum.repo file in /etc/yum.repos.d.
+$vim /etc/yum.repos.d/nginx-yum.repo 
+[Nginx-yum]
+name=nginx-yum 
+baseurl=http://10.114.0.15:8899
+enabled=1
+gpgcheck=0
+
+
+#12.Clean all yum information, reload the new yum information
+$yum clean all 
+$yum makecache
+
+
+
+
+
+
 
 
 
