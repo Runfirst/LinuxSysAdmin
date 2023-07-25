@@ -1,0 +1,47 @@
+#sudo command in Linux stands for Super User Do. It allows you to execute a command as another user, including the superuser. sudo is an efficient way to access the root privileges and execute the command as the root user. With sudo, you can access the root privileges without knowing the root password or logging as the root user. The user needs to have the sudo privileges to run the sudo command.
+
+#How to install sudo
+$yum install sudo
+
+$apt install sudo
+
+
+#Syntax for sudo command 
+$sudo [options] command 
+    -V  display version information of sudo 
+    -h  display help message and exit 
+    -l  list user's privileges or check a specific command 
+    -k  reset the user's timestamp
+    -u  run the command as a different user 
+
+
+#Example
+#1.sudo command to add users to the sudoers file
+#The user and group sudo privileges are defined in the /etc/sudoers file.You can add a user in the sudoers file by using visudo command.
+#You need to add [username] ALL=(ALL:ALL) ALL on the user privilege specification as shown in the below.
+$sudo visudo 
+...
+root    ALL=(ALL:ALL) ALL
+username    ALL=(ALL:ALL) ALL
+
+
+#2.Log all the sudo commands run in your environment
+#Edit the sudoers file by running visudo, and add the below line to the "Defaults" section.
+$visudo
+...
+Defaults logfile=/var/log/sudo 
+...
+$cat /var/log/sudo
+Jan 11 09:40:49 : user1 : TTY=pts/0 ; PWD=/home/user1 ; USER=root ;
+COMMAND=/bin/su -
+Jan 11 09:41:56 : user1 : TTY=pts/0 ; PWD=/home/user1 ; USER=root ;
+COMMAND=/bin/ls /var/www/html
+Jan 11 09:42:08 : user1 : TTY=pts/0 ; PWD=/home/user1 ; USER=root ;
+COMMAND=/bin/cat /etc/passwd
+
+
+
+
+
+
+
