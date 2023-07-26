@@ -12,7 +12,62 @@ $cat /etc/modprobe.d/bonding.conf
 alias bond0 bonding 
 
 
-http://linux-training.be/networking/ch04.html
+#Step3. Create ifcfg-bond0 to configure our bond0 interface.
+$vim /etc/sysconfig/network-scripts/ifcfg-bond0 
+DEVICE=bond0
+IPADDR=192.168.1.199
+NETMASK=255.255.255.0
+ONBOOT=yes
+BOOTPROTO=none
+USERCTL=no 
+
+
+#Step4. Create two files (ifcfg-eth0,eth1), one for each network card that we will use as slave in bond0.
+$vim /etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0
+BOOTPROTO=none
+ONBOOT=yes
+MASTER=bond0
+SLAVE=yes
+USERCTL=no 
+
+$vim /etc/sysconfig/network-scripts/ifcfg-eth1 
+DEVICE=eth1
+BOOTPROTO=none
+ONBOOT=yes
+MASTER=bond0 
+SLAVE=yes
+USERCTL=no
+
+
+#Step5. Bring the interface up with ifup bond0 
+$ifup bond0
+$ifconfig bond0 
+bond0     Link encap:Ethernet  HWaddr 08:00:27:DA:C1:49  
+          inet addr:192.168.1.199  Bcast:192.168.1.255  Mask:255.255.255.0
+          inet6 addr: fe80::a00:27ff:feda:c149/64 Scope:Link
+          UP BROADCAST RUNNING MASTER MULTICAST  MTU:1500  Metric:1
+          RX packets:251 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:21 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:39852 (38.9 KiB)  TX bytes:1070 (1.0 KiB)
+$Ethernet Channel Bonding Driver: v3.5.0 (November 4, 2008)
+
+Bonding Mode: load balancing (round-robin)
+MII Status: up
+MII Polling Interval (ms): 0
+Up Delay (ms): 0
+Down Delay (ms): 0
+
+Slave Interface: eth0
+MII Status: up
+Link Failure Count: 0
+Permanent HW addr: 08:00:27:da:c1:49
+
+Slave Interface: eth2
+MII Status: up
+Link Failure Count: 01
+Permanent HW addr: 08:00:27:40:03:3b
 
 
 
