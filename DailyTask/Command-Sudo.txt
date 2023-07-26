@@ -40,6 +40,40 @@ Jan 11 09:42:08 : user1 : TTY=pts/0 ; PWD=/home/user1 ; USER=root ;
 COMMAND=/bin/cat /etc/passwd
 
 
+#3.Use sudo to run command as a different user 
+$sudo -u user command 
+$sudo --user=username command 
+
+#change the password of another user without logging in 
+$sudo passwd deepak
+
+
+#4.List user privileges with sudo command
+$sudo -l 
+$sudo --list 
+
+#Example:
+deepak@ubuntu:~$sudo -l 
+Matching Defaults entries for deepak on ubuntu:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User deepak may run the following commands on ubuntu:
+    (ALL : ALL) ALL
+
+
+#5.Display privileges for another user with sudo command 
+$sudo -l -U username 
+$sudo -l --other-user username 
+
+
+#6.sudo command to add a user to the sudo group 
+#For RHEL, CentOS
+$sudo usermod -aG wheel username 
+#For Ubuntu 
+$sudo usermod -aG sudo username 
+
+
 
 
 

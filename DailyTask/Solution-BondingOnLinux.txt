@@ -1,0 +1,18 @@
+#A network bond is a method to combine or aggregate physical and virtual network interfaces to provide a logical interface with higher throughput or redundancy.
+#URL    https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/configuring-network-bonding_configuring-and-managing-networking
+
+#Step1. Start with ifconfig -a to get a list of all the network cards on system 
+$ifconfig -a | grep Ethernet
+eth0      Link encap:Ethernet  HWaddr 08:00:27:DD:0D:5C  
+eth1      Link encap:Ethernet  HWaddr 08:00:27:DA:C1:49
+
+
+#Step2. Name the bond "bond0", and add this entry to modprode so the kernel can load the bonding module when we bring the interface up.
+$cat /etc/modprobe.d/bonding.conf 
+alias bond0 bonding 
+
+
+http://linux-training.be/networking/ch04.html
+
+
+

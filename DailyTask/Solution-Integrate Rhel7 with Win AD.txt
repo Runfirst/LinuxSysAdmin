@@ -1,0 +1,84 @@
+#How to integrate Rhel 7.X/CentOS 7.x with AD (Windows Server 2008R2 & Windows Server 2012 R2).
+#RHEL: Windows Integration Guide (https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/windows_integration_guide/index)
+
+
+#Step 1: Install the required packages using yum command
+$yum install sssd realmd oddjob oddjob-mkhomedir adcli samba-common samba-common-tools krb5-workstation policycoreutils-python
+
+#Update the /etc/hosts file and /etc/resolv.conf so that dns name or hostname of AD server gets resolved correctly.
+#For Example: AD server hostname is "adserver.example.com", so place the below line in /etc/hosts file
+$vim /etc/hosts
+...
+192.168.16.151 adserver.example.com adserver 
+
+#Update the /etc/resolv.conf, just replace the domain name and ip address of dns server as per your setup.
+$cat /etc/resolv.conf
+search example.com 
+nameserver 192.168.16.151
+
+
+#Step2. Integrate with AD using realm command 
+#Install above required packages then realm command will be available. We will use beneath realm command to integrate CentOS 7 or RHEL 7 with AD via the user "tech".
+#tech is a bind user which have required privileges on AD.
+$realm join --user=tech adserver.example.com 
+Password for tech:
+
+#Verify whether Linux server has joined the Windows domain or not.
+$realm list 
+example.com
+  type: kerberos
+  realm-name: EXAMPLE.COM
+  domain-name: example.com
+  configured: kerberos-member
+  server-software: active-directory
+  client-software: sssd
+  required-package: oddjob
+  required-package: oddjob-mkhomedir
+  required-package: sssd
+  required-package: adcli
+  required-package: samba-common-tools
+  login-formats: %U@example.com
+  login-policy: allow-realm-logins
+
+#whenever we run 'realm join' command it will automatically configure '/etc/sssd/sssd.conf' file.
+
+
+#Step 3. Check and verify AD users on RHEL 7 or CentOS 7 Servers.
+$id linuxtechi@example.com 
+uid=1997801106(linuxtechi@example.com) gid=1997800513(domain users@example.com) groups=1997800513(domain users@example.com)
+
+#Issue: If we execute id command without domain name, then we will not get any details for user.
+$id linuxtechi 
+id: linuxtechi: no such user 
+#change this behavior by editing the fie /etc/sssd/sssd.conf 
+#change the following parameters from 
+use_fully_qualified_names = True
+fallback_homedir = /home/%u@%d 
+
+#to
+use_fully_qualified_names = False 
+fallback_homedir = /home/%u 
+
+#Restart the sssd service using following systemctl command 
+$systemctl restart sssd
+$systemctl daemon-reload
+
+#Run the id command to check the detail of mentioning domain name.
+$id linuxtechi
+uid=1997801106(linuxtechi) gid=1997800513(domain users) groups=1997800513(domain users)
+
+
+#Step 4. Sudo rights for AD users on CentOS 7 or RHEL 7
+#How to configure sudo rights for AD users? 
+#Create a group on AD with name sudoers and add Linux/Unix users in that group. Then on Linux Server create a file with name "sudoers" under the folder /etc/sudoer.d/
+$cat /etc/sudoers.d/sudoers 
+%sudoers    ALL=(ALL)      ALL
+$id linuxtechi 
+uid=1997801106(linuxtechi) gid=1997800513(domain users) groups=1997800513(domain users), 1997891113(sudoers)
+
+
+
+
+
+
+
