@@ -91,7 +91,64 @@ $IPT -A INPUT -i ${PUB_IF} -p tcp --tcp-flags ALL NONE -j DROP #NULL packets
 $IPT -A INPUT -i ${PUB_IF} -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
 
 $IPT -A INPUT -i ${PUB_IF} -p tcp --tcp-flags SYN,FIN SYN,FIN -m limit --limit 5/m --limit-burst 7 -j LOG --log-level 4 --log-prefix "XMAS Packets"
+$IPT -A INPUT -i ${PUB_IF} -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP #XMAS
 
+$IPT -A INPUT -i ${PUB_IF} -p tcp --tcp-flags FIN,ACK FIN -m limit --limit 5/m --limit-burst 7 -j LOG --log-level 4 --log-prefix "Fin Packets Scan"
+$IPT -A INPUT -i ${PUB_IF} -p tcp --tcp-flags FIN,ACK FIN -j DROP #FIN packet sacns
+
+$IPT -A INPUT -i ${PUB_IF} -p tcp --tcp-flags ALL SYN,RST,ACK,FIN,URG -j DROP
+
+
+#Allow full outgoing connecting but no incomming stuff
+$IPT -A INPUT -i ${PUB_IF} -m state --state ESTABLISHED,RELATED -j ACCEPT 
+$IPT -A OUTPUT -o ${PUB_IF} -m state --state --state NEW,ESTABLISHED,RELATED -j ACCEPT 
+
+
+#Allow ssh
+$IPT -A INPUT -i ${PUB_IF} -p tcp --destination-port 22 -j ACCEPT 
+
+
+#Allow http / https (open port 80 / 443)
+$IPT -A INPUT -i ${PUB_IF} -p tcp --destination-port 80 -j ACCEPT  
+#$IPT -A INPUT -o ${PUB_IF} -p tcp --destination-port 443 -j ACCEPT
+
+
+#allow incoming ICMP ping pong stuff
+$IPT -A INPUT -i ${PUB_IF} -p icmp --icmp-type 8 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+#$IPT -A OUTPUT -o ${PUB_IF} -p icmp --icmp-type 0 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+#Allow port 53 tcp/udp (DNS Server)
+$IPT -A INPUT -i ${PUB_IF} -p udp --dport 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+#$IPT -A OUTPUT -o ${PUB_IF} -p udp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+$IPT -A INPUT -i ${PUB_IF} -p tcp --destination-port 53 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+#$IPT -A OUTPUT -o ${PUB_IF} -p tcp --sport 53 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+
+#Open port 110 (pop3) /143
+$IPT -A INPUT -i ${PUB_IF} -p tcp --destination-port 110 -j ACCEPT 
+$IPT -A INPUT -i ${PUB_IF} -p tcp --destination-port 143 -j ACCEPT 
+
+
+##### Add your rules below #####
+
+#
+
+#
+
+##### End your rules ###########
+
+#Do not log smb/windows sharing packets - too much logging 
+$IPT -A INPUT -p tcp -i ${PUB_IF} --dport 137:139 -j REJECT
+$IPT -A INPUT -p udp -i ${PUB_IF} --dport 137:139 -j REJECT 
+
+#Log everything else and drop
+$IPT -A INPUT -j LOG 
+$IPT -A FORWARD -j LOG
+$IPT -A INPUT -j DROP
+
+
+exit 0
 
 
 
