@@ -20,5 +20,97 @@
     filter table: chains INPUT, FORWARD, OUTPUT 
 
 #targets: ACCEPT, DROP, REJECT
+    >1. Difference between DROP and REJECT
+        DROP: when we use the DROP command, it will not forward the packet or answer it. But, simply drops the packet silently. And no indication is sent to the client or server.
+        REJECT: the REJECT command sends an error message back to the source indicating a connection failure.
+
+
+#iptables command
+$iptables [-t table] SUBCOMMAND chain [-m matchname [per-match-options]] -j targetname [per-target-options]
+    -t table : raw, mangle,nat, filter (default)
+
+    SUBCOMMAND
+        >1. Configure chain
+            -N: new, customize a new chain
+            -X: delete, delete the customization chain (should be enmpy)
+            -P: Policy, set the default policy, ACCEPT or DROP
+            -E: rename the customization chain name; If the customization chain was quoted, the chain can't be deleted or renamed.
+
+        >2. check chains 
+            -L: list, list all rules in the specified chain
+            -n: numberic, display addresses and ports in numberic 
+            -v: verbose, details informations
+            -vv: more details 
+            -x: exactly
+            --line-numbers: Display the serial number of the rules
+            --vnL: common combination
+            --vvnxl --line-numbers: common combination
+        >3. manage rules
+            -A: append, add the rule to the last one
+            -I: insert, insert the rule to chains, the default is the first one.
+            -D: delete, delete the rule with numberic 
+            -R: replace, replace the specific rule with numberic
+
+
+
+
+#Stop the default firewalld
+$systemctl status firewalld
+$systemctl start firewalld
+$iptables -vnl 
+$systemctl stop firewalld
+
+#modify the default policy
+$iptables -A INPUT DROP
+
+
+#Blocking IPs 
+$iptables -t filter -A INPUT -s 59.45.175.62 -j REJECT
+$iptables -A INPUT -s 59.45.175.62 -j REJECT
+#Blocking IP ranges by using the CIDR (Classless Inter-Domain Routing) notation
+$iptable -A INPUT -s 59.45.175.0/24 -j REJECT
+#Blocking output traffic to an IP, should use the OUTPUT chain and the -d flag to specify the destination IP 
+$iptables -A OUTPUT -d 31.13.78.35 -j DROP
+
+
+#Listing rules 
+$iptables -L 
+#Listing rules with the line numbers 
+$iptables -L --line-numbers 
+#iptables also tries to be helpful by doing reverse DNS lookups on the IPs.ToDisable this, you can use the -n switch:
+$iptables -L -n --line-numbers 
+
+
+#Deleting rules or rules through their line numbers.
+$iptables -D INPUT -s 221.194.47.0/24 -j REJECT 
+$iptables -D INPUT 2
+#If you're deleting a bunch of rules, you should first delete the ones with highest line numbers.
+$iptables -D INPUT 12
+$iptables -D INPUT 9
+#Remove all rules in a particular chain
+$iptables -F INPUT 
+
+
+#Inserting and replacing rules 
+#Insert a new rule at the first line 
+$iptables -I INPUT -s 59.45.175.10 -j ACCEPT
+#replace rules with the -R switch 
+$iptables -R INPUT 2 -s 59.45.175.10 -j ACCEPT
+
+
+#Protocols and modules
+#block all incoming TCP traffic. Need to specify the protocol with -p 
+$iptables -A INPUT -p tcp -j DROP
+#block SSH access for an IP range; load the tcp module with -m, check the SSH destination port by using --dport
+$iptables -A INPUT -p tcp -m tcp --dport 22 -s 59.45.175.0/24 -j DROP
+#block SSH and VNC (multiport) access for the IP range, load the multiport module
+$iptables -A INPUT -p tcp -m multiport --dport 22,5901 -s 59.45.175.0/24 -j DROP
+
+
+
+
+
+
+
 
 
