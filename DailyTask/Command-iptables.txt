@@ -107,6 +107,16 @@ $iptables -A INPUT -p tcp -m tcp --dport 22 -s 59.45.175.0/24 -j DROP
 $iptables -A INPUT -p tcp -m multiport --dport 22,5901 -s 59.45.175.0/24 -j DROP
 
 
+#The connection tracking module 
+#The packets from your system do reach the server. However, the packets that the server sends to your system get rejected.
+#What we really need here is a way to tell iptables to not touch packets that are part of an existing connection. Fortunately, iptables is a stateful firewall, and it provides a connection tracking module named "conntrack" for this purpose.
+#Connections tracked by this module will be in one of the following states:
+    >NEW : This state represents the very first packet of a connection.
+    >ESTABLISHED : This state is used for packets that are part of an existing connection.
+    >RELATED : This state is used for connections that are related to another ESTALISHED CONNECTION.
+    >INVALID : This state means the packet doesn't have a proper state.
+    >UNTRACKED: Any packets exempted from connection tracking in the raw table with the NOTRACK target end up in this state.
+    >DNAT : 
 
 
 
