@@ -1,0 +1,24 @@
+#iptables is just a command-line interface to the package filtering functionality in netfilter.
+
+#The packet filtering mechanism provided by iptables is organized into three different kinds of structures: talbes, chains and targets.
+#tables: filter, nat, mangle, raw
+    filter: This is the default and perhaps the most widely used tables. It is used to make decisions about whether a packet should be allowed to reach its destination.
+    mangle: This table allows your to alter packet headers in various way, such as changing TTL values.
+    nat: This table allows you to route packets to different hosts on NAT networks by changing the source and destination address of packaets. It's often used to allow access to services that can't be accessed directly, because they're on a NAT network.
+    raw: iptables is a stateful firewall, which means that packets are inspected with respect to their "state". (For example, a packet could be part of a new connection, or it could be part of an existing connection.) The raw table allows you to work with packets before the kernel starts tracking it state.
+
+#tables priority from high to low: raw->mangle->nat->filter 
+
+#chains: INPUT, OUTPUT, FORWARD, PREROUTING, POSTROUTING
+    PREOUTING: Rules in this chain apply to packets as they just arrive on the network interface. This chain is present in the nat, mangle and raw tables.
+    POSTROUTING: The rules in this chain apply to packets as they just leave on the network interface. 
+
+#Tables present with chain:
+    raw table: chains PREROUTING, OUTPUT
+    mangle table: chains PREROUTING, POSTROUTING, INPUT, OUTPUT, FORWARD
+    nat table: chains PREROUTING, POSTROUTING, OUTPUT, INPUT
+    filter table: chains INPUT, FORWARD, OUTPUT 
+
+#targets: ACCEPT, DROP, REJECT
+
+
