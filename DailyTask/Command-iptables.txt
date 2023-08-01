@@ -118,6 +118,49 @@ $iptables -A INPUT -p tcp -m multiport --dport 22,5901 -s 59.45.175.0/24 -j DROP
     >UNTRACKED : Any packets exempted from connection tracking in the raw table with the NOTRACK target end up in this state.
     >DNAT : This is a virtual state used to represent packets whose destination address was changed by rules in the nat table.
     >SNAT : Like DNAT, this state represents packets whose source address was changed.
+$iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT 
+
+
+#Selecting interfaces
+#INPUT chain: -i flag specifies the input interface
+$iptables -A INPUT -i interfacename -j ACCEPT 
+#OUTPUT chain: -o flag specifies the output interface 
+$iptables -A OUTPUT -o interfacename -d 121.18.238.0/29 -j DROP 
+
+
+#Negating conditions ！
+#Accept TCP traffic intended for HTTP, HTTPS and SSH; drop the rest 
+$iptables -A INPUT -p tcp -m multiport ! --dports 22,80,443 -j DROP
+
+
+#Custom chains 
+    >1. make a custom chain - ssh-rules 
+    $iptables -N ssh-rules 
+    >2. add the rules for the IPs in the new chain
+    $iptables -A ssh-rules -s 18.130.0.0/16 -j ACCEPT 
+    $iptables -A ssh-rules -s 18.11.0.0/16 -j ACCEPT 
+    $iptables -A ssh-rules -j DROP 
+    >3. put the rules in the INPUT chain
+    $iptables -A INPUT -p tcp -m tcp --dport 22 -j ssh-rules 
+    >4.Rrmove the custom chain
+    $iptables -X ssh-rules 
+
+
+#Logging packets : the LOG target 
+#The location of the log depends on the distribution, but it's usually in /var/log/syslog or /var/log/messages
+#log invalid TCP packets before dropping them
+$iptables -A INPUT -p tcp -m tcp --tcp-flags FIN,SYN FIN,SYN -j LOG
+$iptables -A INPUT -p tcp -m tcp --tcp-flags FIN,SYN FIN,SYN -j DROP 
+#The LOG target also takes a --log-prefix option, and you can use this so that you can search the log easily
+$iptables -A INPUT -p tcp -m tcp --tcp-flags FIN,SYN FIN,SYN -j LOG --logprefix=iptables:
+
+
+#iptables-save and iptables-restore 
+$iptables-save > iptables.rules 
+$iptables-restore < iptables.rules 
+
+
+
 
 
 
