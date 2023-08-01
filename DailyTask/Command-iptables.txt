@@ -115,8 +115,9 @@ $iptables -A INPUT -p tcp -m multiport --dport 22,5901 -s 59.45.175.0/24 -j DROP
     >ESTABLISHED : This state is used for packets that are part of an existing connection.
     >RELATED : This state is used for connections that are related to another ESTALISHED CONNECTION.
     >INVALID : This state means the packet doesn't have a proper state.
-    >UNTRACKED: Any packets exempted from connection tracking in the raw table with the NOTRACK target end up in this state.
-    >DNAT : 
+    >UNTRACKED : Any packets exempted from connection tracking in the raw table with the NOTRACK target end up in this state.
+    >DNAT : This is a virtual state used to represent packets whose destination address was changed by rules in the nat table.
+    >SNAT : Like DNAT, this state represents packets whose source address was changed.
 
 
 
