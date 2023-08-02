@@ -1,0 +1,5 @@
+#Method 1: Install NGINX Using Yum Repository
+#Method 2: Compiling and Installing NGINX from Source
+
+
+#Method 1: Install NGINX Using Yum Repository 
