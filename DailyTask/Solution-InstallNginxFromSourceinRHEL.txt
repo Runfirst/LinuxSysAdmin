@@ -22,8 +22,60 @@ $yum install nginx
 
 
 #Method 2: Compiling and Installing NGINX from Source
-#Before starting the Nginx compilation and installation process make sure that you have a C/C++ compiler, PCRE (Perl Compatible Regular Expressions), Zlib compression Library, and OpenSSL packages.
-https://www.tecmint.com/20-linux-yum-yellowdog-updater-modified-commands-for-package-mangement/#:~:text=YUM%20(Yellowdog%20Updater%20Modified)%20is,software%20packages%20on%20a%20system.
+  >step 1: Before starting the Nginx compilation and installation process make sure that you have a C/C++ compiler, PCRE (Perl Compatible Regular Expressions), Zlib compression Library, and OpenSSL packages.
+  $yum list gcc gcc-c++ make zlib-devel pcre-devel openssl-devel
+  $yum -y install gcc gcc-c++ make zlib-devel pcre-devel openssl-devel 
 
-https://www.tecmint.com/install-nginx-from-source/
+  >step2: Download Nginx Source 
+  $wget https://nginx.org/download/nginx-1.23.4.tar.gz
+  $tar xzf nginx-1.23.4.tar.gz 
+  $cd nginx-1.23.4
+  $ls -all
+
+  >step3: compile Nginx from Source 
+        --user=nginx #set the system user that Nginx will run as
+        --group=nginx #set the system group that Nginx will run as 
+        --prefix=/etc/nginx #directory for server files 
+        --sbin-path=/urs/sbin/nginx #Nginx executable file location 
+        --conf-path=/etc/nginx/nginx.conf #set the name for the nginx.conf configuration file
+        --error-log-path=/var/log/nginx/error.log #set Nginx error log file location 
+        --http-log-path=/var/log/nginx/access.log #set Nginx access log file location 
+        --pid-path=/var/run/nginx.pid #sets the name for the main process ID file 
+        --lock-path=/var/run/nginx.lock #sets the name for the Nginx lock file 
+        --with-http_ssl_module #enables building the HTTPS module, not built by default and requires an OpenSSL Library
+        --with-pcre #set the path to the sources of the PCRE library, not built by default and requires a PCRE library
+  $./configure --user=nginx --group=nginx --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --with-http_ssl_module --with-pcre 
+  #creates the make.conf file and outputs a summary of all configurations
+
+  >step4: build the binaries using make command, and install Nginx on your system with "make install" command
+  $make 
+  $make install 
+
+  >step5: add the nginx system user (with /etc/nginx/ as his home directory and with no valid shell)
+  $useradd -d /etc/nginx/ -s /sbin/nologin nginx 
+
+  >step6: configure Nginx File 
+  $vim /etc/nginx/nginx.conf 
+  ...
+  user nginx;
+  ...
+  location / {
+    root /var/www/html;
+    autoindex on;
+    index index.html index.htm;
+  }
+  #create the web document root path
+  $mkdir -p /var/www/html 
+  $/usr/sbin/nginx
+  #check if Nginx is running using your shell prompt
+  $netstat -tulpn | grep nginx 
+
+  >step7: Open Nginx on Firewalld
+  $firewall-cmd --permanent --add-service=http 
+  $firewall-cmd --permanent --add-service=https 
+  $systemctl restart Firewalld
+
+
+  
+
 
