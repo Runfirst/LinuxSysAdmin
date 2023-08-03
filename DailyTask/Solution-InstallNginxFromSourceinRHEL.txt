@@ -3,3 +3,27 @@
 
 
 #Method 1: Install NGINX Using Yum Repository 
+>step 1: install the yum-utils package 
+$yum install yum-utils 
+
+>step 2: enable the nginx official yum repository (/etc/yum.repos.d/nginx.repo)
+$vim /etc/yum.repos.d/nginx.repo
+[nginx-stable]
+name=nginx stable repo
+baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
+gpgcheck=1
+enabled=1
+gpgkey=https://nginx.org/keys/nginx_signing.key 
+module_hotfixes=true
+
+>step3: install and update nginx from the repository
+$yum install nginx
+
+
+
+#Method 2: Compiling and Installing NGINX from Source
+#Before starting the Nginx compilation and installation process make sure that you have a C/C++ compiler, PCRE (Perl Compatible Regular Expressions), Zlib compression Library, and OpenSSL packages.
+https://www.tecmint.com/20-linux-yum-yellowdog-updater-modified-commands-for-package-mangement/#:~:text=YUM%20(Yellowdog%20Updater%20Modified)%20is,software%20packages%20on%20a%20system.
+
+https://www.tecmint.com/install-nginx-from-source/
+
