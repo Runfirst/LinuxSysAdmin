@@ -1,0 +1,27 @@
+#How to find the difference between two directories in Linux
+
+#Solution 1: diff 
+#Here, we want to know what files/subdirectories are common in the two directories, those are present in one directory but not in the other.
+$diff [option]... FILES 
+$diff options dir1 dir2
+
+#By default, its output is ordered alphabetically by files/subdirectory names. In this command, the "-q" switch tells diff to report only when files differ.
+$diff -q directory-1/ directory-2/
+Only in directory-2/: Firefox-for.png
+Only in directory-2/: Firefox-in.pnf
+Only in directory-2/: Flats-theme.png 
+only in directory-1/: Flat-Messager.png 
+#Diff doesn't go into the subdirectories, but we can use the "-r" switch to read the subdirectories as well like this 
+$diff -qr directory-1/ directoy-2/
+
+#Solution 2: rsync --dry-run option allow you to run a trial run of rsync without actually transferring any files.
+$rsync --dry-run [options] source_directory destination_directory 
+
+#For example, to compare the contents of the /home/user/source directory to the /home/user/destination directory
+$rsync --dry-run /home/user/source /home/user/destination 
+
+
+
+
+
+
