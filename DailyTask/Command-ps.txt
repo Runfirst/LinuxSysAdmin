@@ -1,0 +1,96 @@
+#ps (processes status) is a native Unix/Linux utility for viewing information concerning a selecting of running processes on a system; it reads this information from the virtual files in the /proc filesystem.
+#PID: the Process ID    PPID: Parent Process ID     PGID: Process Group ID      SID: the Session ID 
+
+#1. List all processes in current shell
+$ps 
+
+#2. print all processes in diffenent formats
+$ps -A 
+$ps -e 
+PID    TTY                  TIME         CMD 
+  1     ?               00:00:01      systemd
+
+#3. display all processes 
+$ps au 
+$ps aux
+PID    TTY      STAT                 TIME         CMD 
+  1     ?         Ss              00:00:01      /usr/lib/systemd/systemd --switched-root
+
+#4. to perform a full-format listing, add the -f or -F flag.
+$ps -ef 
+$ps -ef     
+UID  PID   PPID     c       STAT TTY                TIME         CMD 
+root   1     0      0       13.04  ?             00:00:01      /usr/lib/systemd/systemd --switched-root
+
+#5. display user running processes 
+#selec all processes owned by you (runner of the ps command, root in this case)
+$ps -x
+
+#6. To display a user's processes by real user ID (RUID) or name.
+$ps -fU username(UserID)
+
+#7. To select a user's processes by effective user ID (EUID) or name 
+$ps -fu username(userID)
+
+#8. The command below enables you to view every process running with root user privileges (real & effective ID) in user format.
+$ps -U root -u root 
+
+#9. Display Group Processes 
+#list all processes owned by a certain group (real group ID or name)
+$ps -fG groupname(groupID)
+
+#11. Display Processes by PID 
+$ps -fp PID 
+
+#12. Select process by PPID 
+$ps -f --ppid PPID
+
+#13. Make a selectiong using a PID list 
+$ps -fp PPID,PPID,PPID 
+
+#14. Display Processes by TTY 
+$ps -t pts/0
+$ps -ft tty1
+
+#15. Print Process Tree
+#A process tree shows how processes on the system are linked to each other.
+$ps -e --forest
+
+#16. Print tree for a given pocess.
+$ps -f --forest -C sshd
+
+#17. Print Process Threads
+#To print all threads of a process, use the "-L" flag, this will show the LWP(lightweight process) as well as NLWP (number of the lightweight processes) columns.
+$ps -fL -C httpd
+
+#19. Specify Custom Output Format 
+#View the PID, PPID, USERNAME, and command of a process 
+$ps -eo pid,ppid,user,cmd 
+
+#20. Specify Custom Output Format 
+#showing files system group, nice, value, start time and elapsed time of a process.
+$ps -p 1154 -o pid,ppid,fgroup,ni,lstart,etime
+
+#21. Find a process name using its PID 
+$ps -p 1154 -o comm=httpd 
+
+#22. To Select a specific process by its name, use the -C flag, this will also display all its child processes.
+$ps -C sshd 
+
+#23. Find all PIDs of all instances of a process, useful when writing scripts that need to read PIDs from an std output or files
+$ps -C httpd -o pid= 
+
+#24. Check the execution time of a process.
+$ps -eo comm,etime,user | grep httpd
+
+#26. Troubleshoot Linux System Performance
+#Find top running processes by highest memory and CPU usage in Linux 
+$ps -eo pid,ppid,cmd,%men,%cpu --sort=-%men | head 
+$ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head 
+
+#30. Perform Real-time Process Monitoring Using Watch Utility
+#Finally, since ps displays static information, you can employ the watch utility to perform real-time process monitoring with repetitive output, displayed after every second as in the command below
+$watch -n 1 'ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head'
+
+#URL: https://www.tecmint.com/ps-command-examples-for-linux-process-monitoring/
+
