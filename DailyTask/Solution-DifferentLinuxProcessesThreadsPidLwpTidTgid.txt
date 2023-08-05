@@ -1,0 +1,7 @@
+#https://topic.alibabacloud.com/a/understanding-linux-processes-threads-pidlwptidtgid_1_16_30000800.html
+#PID-Process id, LWP-Thread id, Tgid-Thread group ID for the thread group leader, PGRP-Process group ID, SID-Session ID for the session leader, TPGID-TTY process group ID for the process GR OUP leader.
+
+#Processes and threads for Linux 
+>A process is the basic unit of resource allocation, and a thread is the basic unit of Dispatch.
+>A process is a collection of resources, including memory address space, file descriptors, and so on, in which multiple threads in a process share these resources.
+>
