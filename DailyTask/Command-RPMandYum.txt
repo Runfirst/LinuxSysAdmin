@@ -1,0 +1,143 @@
+#RPM: RPM Package Manager
+  >Installing, Updating and Removing RPM Packages
+  $rpm -ivh package.rpm 
+    #-i: install an RPM package; -v: show verbose output; -h: show the hash marked progress bar.
+  
+  #install package using the URL
+  $rpm -ivh https://example.com/package.rpm 
+
+  #upgrade an RPM package, using the -U option.
+  $rpm -Uvh package.rpm 
+
+  #Install an RPM package without having all the required dependencies installed on the system, use the --nodeps option.
+  $rpm -Uvh --nodeps package.rpm 
+
+  #Remove (erase an RPM package) using -e option.
+  $rpm -e package.rpm 
+  
+  #Install an RPM package without having all the required dependencies installed on the system, use the --nodeps option.
+  $rpm -Uvh --nodeps package.rpm 
+
+  #The --test option: tell rpm to run of installation or removal command without actually doing anything.
+  $rpm -Uvh --test package.rpm 
+
+
+  >Querying RPM Packages 
+  #query (search) whether a certain package is installed 
+  $rpm -q java-11-openjdk-devel 
+
+  #Pass -i to get more information about the queried package 
+  $rpm -qi java-11-openjdk-devel 
+
+  #To get a list of all the files in an installed RPM package:
+  $rpm -ql pakcage 
+
+  #If you want to find out which installed package a particular file belongs
+  $rpm -qf /path/to/file 
+
+  #To get a list of all installed packages on your system, use as -a option;
+  $rpm -qa   
+
+  
+  >Verifying RPM Packages 
+  #To verify an installed package, use tht -V option 
+  $rpm -V openldap-2.4.46-9.el8.x86_64
+
+  #To verify all the installed rpm packages 
+  $rpm -Va  
+
+
+
+#YUM: Yellowdog Updater Modified is an open-source command-line as well as graphical-based package management tool for RPM based Linux Systems.
+  #install a Package with YUM
+  $yum install firefox
+  #install packages automatically without asking for any confirmation
+  $yum -y install firefox 
+
+
+  #Removing a Package
+  $yum remove firefox 
+
+
+  #Updating a package 
+  $yum update mysql
+
+
+  #List a package 
+  $yum list openssh 
+
+
+  #Search for a package 
+  $yum search vsftpd 
+
+
+  #Get information about a package 
+  $yum info firefox 
+
+
+  #List all available packages 
+  $yum list | less 
+
+
+  #List all installed packages 
+  $yum list installed | less 
+
+
+  #Yum provides Function: yum provides function is used to find which package a pecific file belongs to.
+  $yum provides /etc/http/conf/httpd.conf
+
+
+  #Check for available updates 
+  $yum check-update 
+
+
+  #List all available Group Packages: 
+  #In Linux, a number of packages are bundled into a particular group. Instead of installing individual packages with yum, you can install a pacticular group that will install all the related packages that belong to the group.
+  $yum grouplist 
+
+
+  #Install Group packages 
+  $yum groupinstall 'MySQL Database' 
+
+
+  #Updated a group packages 
+  $yum groupupdate 'DNS Name Server'
+
+
+  #Remove Group Packages
+  $yum groupremove 'DNS Name Server'
+
+
+  #List Enabled Yum Repositories
+  $yum repolist
+
+
+  #List all Enabled and Disabled Yum Repositories 
+  $yum repolist all 
+
+
+  #Install a Package from a Specific Repository
+  $yum --enablerepo=epel install phpmyadmin
+
+
+  #Clean Yum Cache
+  $yum clean all 
+
+
+  #View History of yum 
+  $yum history 
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+

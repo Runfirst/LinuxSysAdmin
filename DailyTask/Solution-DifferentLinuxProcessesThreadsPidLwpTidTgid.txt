@@ -4,4 +4,18 @@
 #Processes and threads for Linux 
 >A process is the basic unit of resource allocation, and a thread is the basic unit of Dispatch.
 >A process is a collection of resources, including memory address space, file descriptors, and so on, in which multiple threads in a process share these resources.
->
+>When the CPU dispatches a task, the basic unit of dispatch (Dispatchable entity) is a thread. If there are no other threads in a process, it can be understood that there is only one main thread in the process, and that the main process is exclusive to all resources in the process.
+>The individual processes are completely independent, and the threads are interdependent and share resources. In a multi-process environment, the termination of any one process does not affect other non-child processes. In a multithreaded environment, the parent thread terminates and all child threads are forced to terminate (without resources).
+
+#Initial understanding of the various IDs. Basically, from high to low, IDs below the split line are less important.
+    PID: Process ID.
+    LWP: Thread ID. A common display in user-configured commands such as PS.
+    tid: Thread ID, equal to LWP. TID is more commonly used in system-provided interface functions, such as Syscall (Sys_gettid) and Syscall (_nr_gettid).
+    tgid: Thread group ID, which is the process ID of thread group leader, equals PID.
+    ----Split Line----
+    pgid: Process group ID, which is the process ID of the process group leader.
+    pthread ID: The ID provided by the Pthread library, the effective range is not at the system level and can be ignored.
+    SID: Session ID for the session leader.
+    tpgid: TTY process group ID for the process group leader. 
+
+    
