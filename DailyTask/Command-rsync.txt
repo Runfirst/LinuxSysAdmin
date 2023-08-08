@@ -1,0 +1,4 @@
+#RSYNC Command Examples for Efficient File Synchronization
+#https://www.tecmint.com/rsync-local-remote-file-synchronization-commands/
+#Rsync (Remote Sync) is the most commonly used command for copying and synchronizing files and directories remotely. 
+#With the help of the rs
