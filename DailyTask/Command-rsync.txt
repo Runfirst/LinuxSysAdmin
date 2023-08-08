@@ -1,4 +1,13 @@
 #RSYNC Command Examples for Efficient File Synchronization
 #https://www.tecmint.com/rsync-local-remote-file-synchronization-commands/
 #Rsync (Remote Sync) is the most commonly used command for copying and synchronizing files and directories remotely. 
-#With the help of the rs
+#With the help of the rsync command, you can copy and synchronize your data remotely and locally across directories, disks, and networks, perform data backups, and mirror between two Linux machines.
+
+#rsync command syntax
+$rsync [OPTIONS] SOURCE DESTINATION
+  -v    Verbose output, displaying detailed information about the transfer.
+  -r    Copies data recursively.
+  -a    archive mode, which allows copying files recursively and it also preserves symbolic links, file permissions, user & group ownerships, and timestamps.
+  -z    Compress files during transfer to reduce network useage.
+  -h    Human-readable, output numbers in a human-readable format.
+  -P    Show progress during the transfer.
