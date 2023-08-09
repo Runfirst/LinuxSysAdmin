@@ -11,3 +11,62 @@ $rsync [OPTIONS] SOURCE DESTINATION
   -z    Compress files during transfer to reduce network useage.
   -h    Human-readable, output numbers in a human-readable format.
   -P    Show progress during the transfer.
+
+
+#1. Copy/Sync File Locally 
+$rsync -zvh /root/data/backup.tar.gz /tmp/backups/
+
+#2. Copy/Sync Directory Locally 
+$rsync -avzh /root/rpmpkgs /tmp/backups/
+
+#3. Copy a Directory from Local to Remote Server
+$rsync -avzh /root/rpmpkgs root@192.168.0.114:/root/
+...
+root@192.168.0.114's password: 
+
+#4. Copy a Directory from Remote to Local Server 
+$rsync -avzh root@192.168.0.141:/root/rpmpkgs /tmp/myrpms
+
+#5. Rsync Over SSH
+#with rsync, we can use SSH for data transfer, using HHS protoclol while transferring our data you can be ensured taht your data is being transferred in a secured connection with encryption so that nobody can read your data.
+$rsync [OPTIONS] -e ssh /path/to/source user@remote: /path/to/DESTINATION
+
+#6. Copy a File from a Remote Server to a local Server with SSH
+  -e option with the protocol name you want to use 
+$rsync -avzhe ssh root@192.168.0.141:/root/anaconda-ks.cfg /tmp 
+
+#7. Copy a File from a local Server to a Remote Server with SSH
+$rsync -avzhe ssh /root/backup/backup.tar.gz root@192.168.0.141:/backups/
+
+#8. Show Progress while Transferring Data with Rsync 
+  --progress option to show the process while transferring the data
+$rsync -avzhe ssh --progress /root/rpmpkgs root@192.168.0.141:/root/rpmpkgs 
+
+#9. Include Files with Particular Extension with Rsync 
+$rsync -avz --include='*.txt' /path/to/source/ username@remote:/path/to/destination/
+
+#10. Exclude File with Particular Extension with Rsync 
+  --exclude option: exclude a specific extension 
+$rsync -avz --exclude='*.ext' /path/to/source/ username@remote:/path/to/destination/
+
+#11. Include and Exclude Files with Rsync 
+#Include those files and directories only which starts with 'R' and exclude all other files and directories.
+$rsync -avze ssh --include 'R*' --exclude '*' root@192.168.0.114:/var/lib/rpm/ /root/rpm 
+
+#12. Use of --delete Option with Rsync 
+  --delete option: delete files that are not there in the source directory 
+$rsync -avz --delete username@source:/var/lib/rpm/ /root/rpm/
+
+#13. Set File Tasnsfer limit with Rsync 
+  --max-size option: specify the Max file size to be transferred or synced 
+$rsync -avzhe ssh --max-size='200k' /var/lib/rpm/ username@destination:/root/tmp 
+
+#14. Automatically Delete Source Files After Transfer 
+  --remove-source-files 
+$rsync --remove-source-files -zvh /path/to/backup.tar.gz username@destination:/tmp/backups/ 
+
+#15. Do a Dry Run with Rsync 
+  --dry-run option: use of this option will not make any changes to the files and shows the output of the command, if the output shows exactly the same as you want to do then you can remove the '--dry-run' option from your command and run on the terminal.
+$rsync --dry-run --remove-source-files -zvh /path/to/backup.tar.gz username@destination:/tmp/backups/ 
+
+
