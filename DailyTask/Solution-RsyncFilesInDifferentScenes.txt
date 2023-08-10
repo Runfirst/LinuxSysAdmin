@@ -1,0 +1,36 @@
+#How to sync files using Rsync in diffrent scenes
+#1. How to sync files/Directories using rsync with non-standard SSH port 
+#2. How to sync new or changed/Modified Files in Linux
+#3. How to sync only updated or modified files on the Linux that have changed on the local machine.
+
+
+
+#1. How to sync files/Directories using rsync with non-standard SSH port
+    >Change SSH port to non-standard port
+    >open and edit the SSH configuration /etc/ssh/sshd_config file.
+    $vim /etc/ssh/sshd_config 
+    ...
+    port 1431
+    ...
+
+    >Allow the new port through your firewall or iptables.
+    $firewall-cmd --add-port 1431/tcp
+    $firewall-cmd --add-port 1431/tcp --permanent
+
+    >restart SSH service.
+    $systemctl restart sshd 
+
+    >rsync with non-standard SSH port 
+    $rsync -arvz -e 'ssh -p port-number' --progress --delete username@remote-server:/path/to/remote/folder /path/to/local/folder
+
+
+#2. How to sync new or changed/Modified Files in Linux
+    >--ignore-existing option: only sync new files on the local machine, that don't exist on the remote machine.
+    $rsync -av --ignore-existing /path/from/source/file* username@destination:/root/database/
+
+#3. How to sync only updated or modified files on the Linux that have changed on the local machine.
+    >--update 
+    $rsync -av --update /path/to/document/* username@destination: /root/
+
+    
+
