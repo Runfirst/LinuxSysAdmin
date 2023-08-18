@@ -1,0 +1,37 @@
+#rsyslog: rocket-fast system for log
+
+#Linux log files should be easy to decipher since they're sotred in text form under the /var/log directory and subdirectory. They cover all kinds of things, like system, kernel, package manager, MySQL and more.
+#Most directories can be grouped under four headings:
+    >Application Logs
+    >Event Logs 
+    >Service Logs
+    >System Logs 
+
+
+#Linux log files interpretation:
+  >/var/log/syslog or /var/log/messages: Shows general messages and info regarding the system. Basically a data log of all activity throughout the globall system. Know that everything that happens on Redhat-based systems, like CentOS or Rhel, will go in messages. Whereas for Ubuntu and other Debian systems, they go in Syslog;
+
+  >/var/log/auth.log or /var/log/secure: Keep authentication logs for both successful or failed logins, and authentication processes. Storage depends on system type. For Debian/Ubuntu, look in /var/log/auth.log; for Rhel/CentOS, go to /var/log/secure.
+
+  >/var/log/boot.log: Start-up messages and boot info.
+
+  >/var/log/maillog or /var/log/mail.log: is for mail server logs, handy for postfix, smtpd, or email-related services info running on your server.
+
+  >/var/log/kern: Keeps in Kernel logs and warning info. Also useful to fix problems with custom kernels.
+
+  >/var/log/dmesg: a repository for device driver messages. Use dmesg to see messages in this file.
+  
+  >/var/log/faillog: records info on failed logins. Hence, handy for examining potential security breaches like login credential hacks and brute-force attachs.
+
+  >/var/log/corn: Keeps a record of Crond-related messages (cron jobs). Like when the corn daemon started a job.
+
+  >/var/log/daemon.log: Keeps track of running background services but doesment represent them graphically.
+
+  >/var/log/btmp: Keeps a note of all failed login attempts.
+
+  >/var/log/utmp: current login state by user.
+
+  >/var/log/wtmp: record of each login/logout.
+
+  >/var/log/lastlog: holds every user's last login. A binary file you can read via lastlog command.
+
