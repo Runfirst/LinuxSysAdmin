@@ -35,3 +35,22 @@
 
   >/var/log/lastlog: holds every user's last login. A binary file you can read via lastlog command.
 
+
+#The format of the log file consists of the following 4 columns:
+  >the time the event occurred
+  >the hostname of the server that generated the enent.
+  >the name of the service or program that generated the event.
+  >event specific information.
+
+#Log format example:
+$vim /var/log/secure 
+Jun 5 03：20：46 localhost sshd[1630]：Accepted password for root from 192.168.0.104 port 4229 ssh2
+
+Jun 5 03：20：46 localhost sshd[1630]：pam_unix(sshd：session)：session opened for user root by (uid=0)
+
+Jun 5 03：25：04 localhost useradd[1661]：new group：name=bb， GID=501
+
+Jun 5 03：25：04 localhost useradd[1661]：new user：name=bb， UID=501， GID=501， home=/home/bb， shell=/bin/bash
+
+Jun 5 03：25：09 localhost passwd：pam_unix(passwd：chauthtok)：password changed for bb
+
