@@ -35,3 +35,6 @@
 
   >/var/log/lastlog: holds every user's last login. A binary file you can read via lastlog command.
 
+
+#rsyslog 重要术语：
+  >Facility: 从功能或程序上对日志进行分类， 常见的facility有auth(认证相关日志), authpriv(授权相关日志), cron, daemon(系统服务相关日志), ftp, kern(r)
