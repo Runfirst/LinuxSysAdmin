@@ -104,6 +104,55 @@ Jun 5 03：25：09 localhost passwd：pam_unix(passwd：chauthtok)：password ch
     #SyslogFacility AUTH
     #SyslogFacility AUTHPRIV 
     SyslogFacility local3
+
+  >Step3. In the rsyslog configuration file specify the target file at any level in the local3 facility as /var/log/sshd.log 
+  $grep "local" /etc/rsyslog.conf 
+  #Turn off message reception via local log socket;
+  #local messages are retrieved through imjournal now.
+  local7.*                                      /var/log/boot.log
+  local3.*                                      /var/log/sshd.log 
+
+  >Step4. restart rsyslogd and sshd services 
+  $systemctl restart rsyslog sshd 
+  #View /var/log/sshd.log 
+  $ll /var/log/sshd.log 
+
+  $cat /var/log/sshd.log 
+
+
+
+#Log management widget
+#journalctl: use journalctl to view all logs (kernel logs and application logs) with one command. The log configuration file /etc/systemd/journald.conf 
+  >1. View all logs (by default, only the logs of this startup are saved)
+  $journalctl
+  -- Logs begin at 一 2019-12-23 12:42:48 CST, end at 二 2019-12-24 20:01:01 CST. --
+  12月 23 12:42:48 docker systemd-journal[105]: Runtime journal is using 8.0M (max allowed 91.3M, trying to leave 136.9
+  12月 23 12:42:48 docker kernel: Initializing cgroup subsys cpuset
+  12月 23 12:42:48 docker kernel: Initializing cgroup subsys cpu
+  12月 23 12:42:48 docker kernel: Initializing cgroup subsys cpuacct
+  12月 23 12:42:48 docker kernel: Linux version 3.10.0-957.27.2.el7.x86_64 (mockbuild@kbuilder.bsys.centos.org) (gcc ve
+  12月 23 12:42:48 docker kernel: Command line: BOOT_IMAGE=/vmlinuz-3.10.0-957.27.2.el7.x86_64 root=/dev/mapper/centos-
+  12月 23 12:42:48 docker kernel: Disabled fast string operations
+
+  >2.View kernel logs (don't display application logs)
+  $journalctl -k 
+  -- Logs begin at 一 2019-12-23 12:42:48 CST, end at 二 2019-12-24 20:01:01 CST. --
+  12月 23 12:42:48 docker kernel: Initializing cgroup subsys cpuset
+  12月 23 12:42:48 docker kernel: Initializing cgroup subsys cpu
+  12月 23 12:42:48 docker kernel: Initializing cgroup subsys cpuacct
+  12月 23 12:42:48 docker kernel: Linux version 3.10.0-957.27.2.el7.x86_64 (mockbuild@kbuilder.bsys.centos.org) (gcc ve
+  12月 23 12:42:48 docker kernel: Command line: BOOT_IMAGE=/vmlinuz-3.10.0-957.27.2.el7.x86_64 root=/dev/mapper/centos-
+  12月 23 12:42:48 docker kernel: Disabled fast string operations
+   
+  >3. View the log of the system startup this time 
+  $journalctl -b 0
+
+  >4. View the log of the specified time 
+    $journalctl --since="2017-10-30 18:10：30"
+    $journalctl --since="20 min ago"
+    $journalctl --since=yesterday
+    $journalctl --since "2017-01-10" --until "2017-01-11 03:00"
+    $journalctl --since 09:00 --until "1 hour ago" 
     
 
 
