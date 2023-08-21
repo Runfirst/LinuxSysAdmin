@@ -36,7 +36,6 @@
   >/var/log/lastlog: holds every user's last login. A binary file you can read via lastlog command.
 
 
-<<<<<<< HEAD:DailyTask/Command-rsyslog.txt
 #The format of the log file consists of the following 4 columns:
   >the time the event occurred
   >the hostname of the server that generated the enent.
@@ -55,7 +54,3 @@ Jun 5 03：25：04 localhost useradd[1661]：new user：name=bb， UID=501， GI
 
 Jun 5 03：25：09 localhost passwd：pam_unix(passwd：chauthtok)：password changed for bb
 
-=======
-#rsyslog 重要术语：
-  >Facility: 从功能或程序上对日志进行分类， 常见的facility有auth(认证相关日志), authpriv(授权相关日志), cron, daemon(系统服务相关日志), ftp, kern(r)
->>>>>>> 77e414bebe72314b2e023e1fe8ff9fbb11868196:DailyTask/Solution-UseRsyslogToManageLog.txt
