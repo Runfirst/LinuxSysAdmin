@@ -8,7 +8,7 @@
     >System Logs 
 
 
-#Linux log files interpretation:
+#Linux Log Storage:
   >/var/log/syslog or /var/log/messages: Shows general messages and info regarding the system. Basically a data log of all activity throughout the globall system. Know that everything that happens on Redhat-based systems, like CentOS or Rhel, will go in messages. Whereas for Ubuntu and other Debian systems, they go in Syslog;
 
   >/var/log/auth.log or /var/log/secure: Keep authentication logs for both successful or failed logins, and authentication processes. Storage depends on system type. For Debian/Ubuntu, look in /var/log/auth.log; for Rhel/CentOS, go to /var/log/secure.
@@ -53,4 +53,57 @@ Jun 5 03：25：04 localhost useradd[1661]：new group：name=bb， GID=501
 Jun 5 03：25：04 localhost useradd[1661]：new user：name=bb， UID=501， GID=501， home=/home/bb， shell=/bin/bash
 
 Jun 5 03：25：09 localhost passwd：pam_unix(passwd：chauthtok)：password changed for bb
+
+
+#rsyslog parameter:
+  >facility: auth (authentication-related logs), authpriv (authorization-related logs), cron (scheduled task-related logs), daemon (system service-related logs), ftp (ftp service-related logs), kern (kernel-related logs), lpr (print-related logs), mail (mail-related logs), news (news-related logs), security (security related logs), user (user late), uucp (file copy related logs), local0-local7 (custom related ).
+  >priority: from low to high, debug (debugging), info (message), notice (attention), warm (warning), err (error error), crit(critical serious warning), alert (requires immediate modification information), emerg (panic kernel crash, Kernel panic and other serious ).
+  >Program environment: package:rsyslog, main program:/usr/sbin/rsyslogd, main configure file: /etc/rsyslog.conf, /etc/rsyslodg.d./*configure; Library files: /lib64/rsyslog/*.so
+
+  >Configuration file format: consists of three parts
+    MODULES:related module configuration 
+    GLOBAL DIRECTIVES: global configuration 
+    RULES: Lgoging related rule settings
+
+#rsyslog rules configuration format: facility.priority; facility.priority; ... target
+  >facility:
+    *: all facilities
+    facility1, facility2, facility3,...:  list of specified facilities 
+  >priority:
+    *: Indicates all levels
+    none: no level 
+    priority: this level and all levels above this level 
+    =priority: this level only
+  >target:
+    File path: usually in /var/log/,"-" before the file path means asynchronous writing
+    user: Notify the specified user of the log event by sending the infomation to the terminal of the user logged into the system for display; * indicates all logged-in user
+    Log server: @host, send the log to the specified remote server for recording; host: indicates the address of the log server, which listens to port 514 of the tcp or udp protocol by default to provide services
+    Pipeline: |command, forwarded to other commands for processing
+  >other logs:
+    /var/log/wtmp: The log of the current system's successful login system needs to be viewed with the last command
+    /var/log/btmp: The log of the failure of the current system to log in to the system needs to be viewed with the lastb command.
+    /var/log/dmesg: log information during the system boot process; you can also use the dmesg command to view it.
+    lastlog: displays the last log-in time of all users on the current system.
+
+
+#Separates the sshd log to /var/log/sshd.log
+#sshd logs are recorded in the /var/log/secure file. Now we will separate the sshd logs to /var/log/sshd.log. 
+
+  >Step1. check the configuration file of sshd 
+    $grep "log" /etc/ssh/sshd_config
+    #SyslogFacility AUTH 
+    SyslogFacility AUTHPRIV 
+  #check the configuration file of rsyslog 
+    $grep "authpriv" /etc/rsyslog.conf 
+    *.info; mail.none; authpriv.none; corn.none       /var/log/messages 
+    #The authpriv file has restricted access.
+    authpriv.*                                        /var/log/secure 
+
+  >Step2. change the sshd configuration file to change the log's facility to a custom facility local3
+    $grep "log" /etc/ssh/sshd_config
+    #SyslogFacility AUTH
+    #SyslogFacility AUTHPRIV 
+    SyslogFacility local3
+    
+
 
