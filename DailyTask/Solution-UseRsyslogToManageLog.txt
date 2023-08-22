@@ -153,6 +153,45 @@ Jun 5 03：25：09 localhost passwd：pam_unix(passwd：chauthtok)：password ch
     $journalctl --since=yesterday
     $journalctl --since "2017-01-10" --until "2017-01-11 03:00"
     $journalctl --since 09:00 --until "1 hour ago" 
-    
+
+  >5. the latest log at the end shows 10 lines by default 
+    $journalctl -n 
+
+    $journalctl -n 15
+
+  >6. Real-time scrolling display of the latest log (similar as "tail -f") 
+    $journalctl -f 
+
+  >7. View the log of the specified service 
+    $journalctl /sbin/nginx 
+
+    $journalctl /usr/lib/systemd/systemd 
+
+  >8. View the log of the specified process 
+    $journalctl _PID=757
+
+    $journalctl _PID=10781
+
+  >9. View the log of the script under a certain path 
+    $journalctl /usr/bin/bash 
+    -- Logs begin at - 2019-12-23 12:42:48 CST, end at = 2019-12-24 21:08:23 CST. --
+
+  >10. View the log of the specified user 
+    $journalctl _UID=1000 
+
+  >11. View the log of a unit 
+    $journalctl -u nginx.service 
+
+    $journalctl -u nginx.service --since today
+
+    $systemctl -restart nginx
+     
+    $journalctl -u nginx.service --since today 
+  
+  >12. display the disk space occupied by the log 
+    $journalctl --disk-usage
+
+
+
 
 
