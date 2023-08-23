@@ -191,7 +191,8 @@ Jun 5 03：25：09 localhost passwd：pam_unix(passwd：chauthtok)：password ch
   >12. display the disk space occupied by the log 
     $journalctl --disk-usage
 
-
+#logrotate: used to delete old log files and create new log files, called log dump or rollover
+  >configuration file: /etc/logrotate.conf
 
 
 

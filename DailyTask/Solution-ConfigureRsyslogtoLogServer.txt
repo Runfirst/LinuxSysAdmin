@@ -1,0 +1,2 @@
+#Config rsyslog to become a log server
+    >Step 1. rsyslog works on the 514 port configuration of tcp or udp protocol
