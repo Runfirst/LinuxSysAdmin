@@ -1,2 +1,18 @@
 #Config rsyslog to become a log server
-    >Step 1. rsyslog works on the 514 port configuration of tcp or udp protocol
+    >Step 1. rsyslog works on the 514 port configuration of tcp or udp protocol.
+        [root@test ~]$grep -i "tcp" /etc/rsyslog.conf 
+        #Provides TCP syslog reception
+        $ModLoad imtcp
+        $InputTCPServerRun 514
+        #Remote Logging (we use TCP for reliable delivery)
+
+        [root@test ~]$grep -i "udp" /etc/rsyslog.conf 
+        #Provides UDP syslog reception 
+        $Modload imudp
+        $UDPServerRun 514
+    
+    >Step2. Restart the rsyslog service, 
+
+
+
+
