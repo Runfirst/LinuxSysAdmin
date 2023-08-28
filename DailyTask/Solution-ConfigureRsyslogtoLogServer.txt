@@ -11,8 +11,32 @@
         $Modload imudp
         $UDPServerRun 514
     
-    >Step2. Restart the rsyslog service, 
+    >Step2. Restart the rsyslog service, configure rsyslog on its client computer, and let its logs be sent to the rsyslog server for records.
+        [root@test ~]$systemctl restart rsyslog 
+        [root@test ~]$ss -ntul
+        Netid State      Recv-Q Send-Q           Local Address:Port                          Peer Address:Port             
+        udp   UNCONN     0      0                            *:123                                      *:*                 
+        udp   UNCONN     0      0                    127.0.0.1:323                                      *:*                 
+        udp   UNCONN     0      0                            *:514                                      *:*                 
+        udp   UNCONN     0      0                          ::1:323                                     :::*                 
+        udp   UNCONN     0      0                           :::514                                     :::*                 
+        tcp   LISTEN     0      100                  127.0.0.1:25                                       *:*                 
+        tcp   LISTEN     0      25                           *:514                                      *:*                 
+    #Explanation: after restarting the service, port 514 has been up, then configure the rsyslog of the client to send logs to the log server through the network
+        [root@test ~]$grep "192.168.0.99" /etc/rsyslog.conf 
+        *.info;mail.none;authpriv.none;cron.none            @192.168.0.99
 
+    #Explanation: The above configuration means that except for mail, authpriv, and cron, the info and logs above info level of all facilities are sent to 192.168.0.99 for records.
+    #A "@" indicates that the connection server is through UDP protocol connection, logs are transmitted through UDP protocol; 
+    #Two "@" indicate that the connection server is connected through "TCP", and logs are transmitted through TCP protocol.
+
+    >Step3. Restart the rsyslog service on the client, and view the client's log on the server
+        [root@test ~]$/etc/init.d/rsyslog restart 
+        Shutting down system logger:        [  OK  ]
+        Starting system logger:             [  OK  ]
+        [root@test ~]$logger "I am test-node1."
+        [root@test ~]$tail /var/log/messages
+        
 
 
 
