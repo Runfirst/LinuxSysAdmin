@@ -39,7 +39,14 @@
 
 #Rsyslog records logs in myriadb
     >Step1. Prepare the database server 
-        [root@test ~]$yum install mariadb        
+        [root@test ~]$yum install mariadb 
+        [root@test ~]$systemctl status mariadb 
+        [root@test ~]$systemctl start mariadb 
+        [root@test ~]$mysql
+        MariaDB [ (none) ]>
+
+    >Step2. Authorize rsyslog on the mariadb server to connect to the current database server.
+        MariaDB [ (none) ]>select user,host,password from mysql.user        
 
 
 
