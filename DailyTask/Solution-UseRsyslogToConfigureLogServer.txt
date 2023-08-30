@@ -36,7 +36,10 @@
         Starting system logger:             [  OK  ]
         [root@test ~]$logger "I am test-node1."
         [root@test ~]$tail /var/log/messages
-        
+
+#Rsyslog records logs in myriadb
+    >Step1. Prepare the database server 
+        [root@test ~]$yum install mariadb        
 
 
 
