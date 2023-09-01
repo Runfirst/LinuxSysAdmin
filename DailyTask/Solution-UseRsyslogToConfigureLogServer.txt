@@ -46,7 +46,30 @@
         MariaDB [ (none) ]>
 
     >Step2. Authorize rsyslog on the mariadb server to connect to the current database server.
-        MariaDB [ (none) ]>select user,host,password from mysql.user        
+        MariaDB [ (none) ]>select user,host,password from mysql.user;  
+
+    >Step3. Install the package rsyslog-mysql related to the mysql module on the rsyslog server
+        [root@test ~]$yum install rsyslog-mysql 
+
+    >Step4. Create database and tables for rsyslog 
+        [root@test ~]$rpm -ql rsyslog-mysql 
+        [root@test ~]$mysql < /usr/share/doc/rsyslog-8.24.0/mysql-createDB.sql
+    
+    >Step5. Configure rsyslog to save the log to mysql 
+    #Add the log facilities and log levels that need to be recorded as well as the address of the database, database name, user name and password to connect to the database are written under ####RULES
+        [root@test ~]$grep "ommysql" /etc/rsyslog.conf 
+        $ModLoad ommysql
+        *.info;mail.none;authpriv.none;cron.none            :ommysql:192.168.0.99,Syslog,rsyslog,rsyslogpass
+
+    >Setp7. View logs in the database;
+        [root@test ~]$mysql 
+        MariaDB[(none)]>use Syslog
+
+
+#Display the logs in the database through loganalyzer
+
+
+
 
 
 
