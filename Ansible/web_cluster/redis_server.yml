@@ -1,0 +1,27 @@
+- hosts: dbservers
+  tasts: 
+    - name: Installed Redis Server
+      yum:
+        name: redis
+        state: present
+
+    - name: Configure Redis Server
+      copy: 
+        src: ./files/redis.conf.j2
+        dest: /etc/redis.conf
+        owner: redis
+        group: root
+        mode: 0640
+      notify: Restart Redis Server
+
+    - name: Systemd Redis Server
+      systemd:
+        name: redis
+        state: started
+        enabled: yes
+  
+  handlers:
+    - name: Restart Redis Server
+      systemd: 
+        name: redis
+        state: restarted
