@@ -1,0 +1,119 @@
+- hosts: webservers
+  tasks:
+    
+    - name: Installed Nginx Server
+      yum:
+        name: nginx 
+        state: present
+
+    - name: Installed Php Server
+      yum:
+        name: php
+        state: present
+
+# nginx
+
+    - name: Configure Nginx nginx.conf
+      copy:
+        src: files/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: 0644
+      notify: Restart Nginx Server
+
+    - name: Create Group www
+      group: 
+        name: www
+        gid: 666
+    
+    - name: Create User www
+      user: 
+        name: www
+        uid: 666
+        group: www
+        create_home: no 
+        shell: /sbin/nologin
+
+    - name: Started Nginx Server
+      systemd: 
+        name: nginx
+        state: started
+        enabled: yes
+
+# PHP
+
+    - name: Configure PHP Server php.ini
+      copy: 
+        src: ./files/php.ini.j2
+        dest: /etc/php.ini
+        owner: root
+        group: root
+        mode: 0644
+      notify: Restart PHP Server
+
+    - name: Configure PHP Server PHP-fpm.d/www.conf
+      copy:
+        src: ./files/php-fpm.www.conf.j2
+        dest: /etc/php-fpm.d/www.conf
+        owner: root
+        group: root
+        mode: 0644
+      notify: Restart PHP Server
+
+    - name: Started PHP Server
+      system:
+        name: php-fpm
+        state: started
+        enabled: yes
+
+# Code
+
+    - name: Copy Nginx Virtual Site
+      copy: 
+        src: ./files/ansible.oldxu.net.conf.j2
+        dest: /etc/nginx/conf.d/ansible.oldxu.net
+      notify: Restart Nginx Server
+
+    - name: Create Ansible Directory
+      file: 
+        path: /ansible
+        owner: www
+        group: www
+        mode:0755
+        recurse: yes 
+
+    - name: Unarchice PHP Code
+      unarchive: 
+        src: files/phpMyAdmin-5.2.1-all-languages.zip
+        dest: /ansible/
+        creates: /ansible/phpMyAdmin-5.2.1-all-languages/config.inc.php
+      
+    - name: Create Link
+      file: 
+        src: /ansible/phpMyAdmin-5.2.1-all-languages/
+        dest: /ansible/phpmyadmin
+        state: link
+
+    - name: Change phpmyadmin Configure
+      copy: 
+        src: ./file/config.inc.php.j2
+        dest: /ansible/phpmyadmin/configur.inc.php
+
+
+
+  handlers:
+    - name: Restart Nginx Server
+      systemed: 
+        name: nginx 
+        state: restarted
+
+    - name: Restarted PHP Server
+      systemed: 
+        name: php-fpm
+        state: restarted
+
+
+
+
+

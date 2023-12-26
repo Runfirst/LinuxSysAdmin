@@ -1,0 +1,15 @@
+
+upstream ansible {
+        server 172.16.1.7:80;
+        server 172.16.1.8:80;
+}
+
+server {
+        listen 80;
+        server_name ansible.oldxu.net;
+
+        location / {
+                proxy_pass http://ansible;
+                proxy_set_header Host $http_host;
+        }
+}

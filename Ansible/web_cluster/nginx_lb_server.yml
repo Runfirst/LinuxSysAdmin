@@ -1,0 +1,30 @@
+
+- hosts:
+  tasks:
+    - name: Installed Nginx Server
+      yum: 
+        name: nginx
+        state: present
+
+    - name: Configure Nginx Server
+      copy:
+        src: ./files/nginx_lb.conf.j2
+        dest: /etc/nginx/nginx.conf
+      notify: Restart Nginx Server
+
+    - name: Configure conf.d/proxy.conf
+      copy: 
+        src: ./files/proxy_ansible.oldxu.net.conf.j2
+        dest: /etc/nginx/conf.d/proxy_ansible.oldxu.net.conf
+      notify: Restart Nginx Server
+
+    - name: Started Nginx Server
+      systemd:
+        name: nginx
+        state: started
+
+  handlers:
+    - name: Restart Nginx Server
+      systemd:
+        name: nginx
+        state: started
