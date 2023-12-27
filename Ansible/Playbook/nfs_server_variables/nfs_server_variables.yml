@@ -1,0 +1,6 @@
+- hosts: webservers
+  tasks:
+
+    - name: 1 Installed NFS Server
+      yum:
+        name: nfs-utils
