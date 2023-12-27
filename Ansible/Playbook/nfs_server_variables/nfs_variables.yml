@@ -1,0 +1,5 @@
+nfs_share_data /9999
+nfs_uid: 5656
+nfs_gid: 5656
+nfs_user: cc
+nfs_group: cc

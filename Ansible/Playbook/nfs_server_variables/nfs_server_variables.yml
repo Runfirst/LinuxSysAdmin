@@ -1,6 +1,60 @@
 - hosts: webservers
+  vars_files: ./nfs_variables.yml
+  
   tasks:
 
     - name: 1 Installed NFS Server
       yum:
         name: nfs-utils
+        state: present
+
+    - name: 2 Configure NFS Server
+      template: 
+        src: ./exports.j2
+        dest: /etc/exports
+      notify: Restart NFS Server
+
+    - name: 3 Init Group
+      group:
+        name: "{{ nfs_group }}"
+        gid: "{{ nfs_gid }}"
+
+    - name: 4 Init user
+      user:
+        name: "{{ nfs_user }}"
+        uid: "{{ nfs_uid }}"
+        group: "{{ nfs_group }}"
+        shell: /sbin/nologin
+        create_home: no 
+
+    - name: 3 Init Create Directory
+      file:
+        path: "{{ nfs_share_data }}"
+        state: directory
+        owner: "{{ nfs_user }}"
+        group: "{{ nfs_group }}"
+        mode: "0755"
+        
+    - name: 4 Started NFS Server
+      systemd: 
+        name: nfs
+        state: started
+        enabled: yes 
+
+    handlers:
+      - name: Restart NFS Server
+        systemed:
+          name: nfs 
+          state: restarted
+
+
+- hosts: localhost
+  vars_files: ./nfs_variables.yml
+  tasks:
+      - name: Mount
+        mount: 
+          src: 172.16.1.7:"{{ nfs_share_data }}"
+          dest: /opt
+          fstype: nfs 
+          opts: defaults
+          stat: mounted
