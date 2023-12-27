@@ -1,0 +1,13 @@
+- hosts: webservers
+  tasks:
+    - name: String
+      shell: echo $RANDOM | md5sum | cut -c 2-10
+      register: systemd_sj
+
+    - name: debug
+      debug: 
+        msg: "{{ systemd_sj.stdout }}"
+
+    - name: Change Hostname
+      hostname:
+        name: "web_{{ systemd_sj.stdout }}"
