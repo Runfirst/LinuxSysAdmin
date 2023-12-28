@@ -9,6 +9,6 @@
 
     - name: Ubuntu Install httpd
       yum: 
-        name: httpd2
+        name: apache2
         state: present
       when: (ansible_distribution == "Ubuntu")

@@ -1,0 +1,15 @@
+#Install Nginx when some special hosts didn't install nginx
+- hosts: all
+  tasks: 
+    - name: Get System Install Nginx
+      shell:
+        cmd: rpm -qa nginx | wc -l
+      register: get_nginx
+
+    - name: Create nginx File 
+      file: 
+        path: /tmp/nginx_not_install.txt
+        state: touch
+      When: get_nginx.stdout == '0'
+
+

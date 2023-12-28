@@ -1,0 +1,18 @@
+#Determine wheather the service is running normally.
+- hosts: webservers
+  tasks:
+    
+    - name: Get httpd Server Status
+      shell: 
+        cmd: systemctl status httpd &> /dev/null
+      register: Httpd_Check
+    
+    - name: Debug
+      debug:
+        msg: "{{ Httpd_Check.rc }}"
+
+    - name: Restart httpd
+      systemd:
+        name: httpd
+        status: restarted
+      when: Httpd_Check.rc == 0

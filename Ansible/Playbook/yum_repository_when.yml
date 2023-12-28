@@ -1,0 +1,14 @@
+# Add Nginx repository to some special hosts
+- hosts: all
+  tasks:
+    - name: Add Nginx Yum Repository
+      yum_repository:
+        name: nginx 
+        description: Nginx Respository
+        baseurl: http://nginx.org/packages/centos/7/$basearch/
+        gpgcheck: no 
+      when: (ansible_hostname is match("web*"))
+
+#when works with and Or
+#when: (ansible_hostname is match("web*")) or
+       (ansible_hostname is match("1"))
