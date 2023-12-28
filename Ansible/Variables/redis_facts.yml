@@ -1,0 +1,30 @@
+#Generate configuration file base on IP address which is from facts variables
+- hosts: webservers
+  tasks:
+    - name: Installed Redis Server
+      yum:
+        name: redis
+        state: present
+
+    - name: Configuration Redis Server
+      template:
+        src: ./redis.conf.j2
+        dest: /etc/redis.conf
+      notify: Restart Redis Server
+
+    - name: Started Redis Server
+      systemd: 
+        name: redis
+        state: started
+        enabled: yes
+  handlers:
+    - name: Restart Redis Server
+      systemd: 
+        name: redis
+        state: restarted
+        
+
+
+
+
+

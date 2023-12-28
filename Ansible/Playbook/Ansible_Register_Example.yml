@@ -11,3 +11,12 @@
     - name: Change Hostname
       hostname:
         name: "web_{{ systemd_sj.stdout }}"
+
+
+#Use facts to get Server infoes.
+- hosts: webservers
+  tasks:
+
+    - name: Print IP
+      debug:
+        msg: "{{ ansible_eth1.ipv4.address }} {{ ansible_fqdn }} {{ ansible_processor_vcpus }} "

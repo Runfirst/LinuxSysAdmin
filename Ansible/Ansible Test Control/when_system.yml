@@ -1,0 +1,14 @@
+# Install Apache for all hosts
+- hosts: web
+  tasks:
+    - name: CentOS Install httpd
+      yum: 
+        name: httpd
+        state: present
+      when: (ansible_distribution == "CentOS")
+
+    - name: Ubuntu Install httpd
+      yum: 
+        name: httpd2
+        state: present
+      when: (ansible_distribution == "Ubuntu")
