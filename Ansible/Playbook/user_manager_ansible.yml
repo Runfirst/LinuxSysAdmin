@@ -1,0 +1,46 @@
+#how to use a user to manager ansible.
+- hosts: all
+  vars;
+    - user_manager oldxu_123
+  tasks:
+
+# this task will be running on Manster Server.
+    - name: Creater Manager {{ user_manager }}
+      user:
+        name: "{{ user_manager }}"
+        generate_ssh_key: yes
+        ssk_key_bits: 2048
+        ssh_key_file: .ssh/id_rsa
+      register: user_messages
+      delegate_to: localhost
+      run_once: true
+
+    - name: debug
+      debug: 
+        msg: "{{ user_messages.ssh_public_key }}"
+
+#Client user.    
+    - name: Create User
+      user: 
+        name: "{{ user_manager }}"
+    
+    - name: Create User .ssh Directory
+      file:
+        path: "/home/{{ user_manager }}/.ssh"
+        state: directory
+        owner: "{{ user_manager }}"
+        group: "{{ user_manager }}"
+        mode: "0700"
+    
+    - name: Save Key
+      copy: 
+        content: "{{ user_messages.ssh_public_key }}"
+        dest: "/home/{{ user_manager }}/.ssh/authorized_keys"
+        owner: "{{ user_manager }}"
+        group: "{{ user_manager }}"
+        mode: "0600"
+
+    - name: Add {{ user_manager }} Sudoers   
+      lineinfile:
+        path: /etc/sudoers
+        line: "{{ user_manager }} ALL=(ALL)  NOPASSWD:ALL"

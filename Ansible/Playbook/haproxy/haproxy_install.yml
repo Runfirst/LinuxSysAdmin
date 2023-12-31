@@ -1,0 +1,24 @@
+#Intall and configure Haproxy
+- hosts: lbservers
+  tatks:
+    - name: Installed haproxy Server
+      yum:
+        name: haproxy
+        state: present
+
+    - name: Configure Haproxy Server
+      copy: 
+        src: ./haproxy.cfg.j2
+        dest: /etc/haproxy/haproxy.cfg
+      notify: Restart Haproxy Server
+    
+    - name: Started Haproxy Server
+      systemed:
+        name: haproxy
+        state: started
+
+  handlers:
+    - name: Restart Haproxy Server
+      systemd:
+        name: haproxy
+        state: restarted

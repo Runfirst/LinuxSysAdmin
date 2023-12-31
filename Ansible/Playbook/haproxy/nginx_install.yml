@@ -1,0 +1,25 @@
+- hosts: webservers
+  tasks: 
+    - name: nginx
+      state: present
+
+    - name: Configure Nginx Website
+      copy:
+        src: ./ha.oldxu.net.conf.j2
+        dest: /etc/nginx/conf.d/haproxy.oldxu.net.conf
+      nitify: Restart nginx Server
+
+    - name: Web Content
+      copy: 
+        content: "App Version: {{ ansible_eth1.ipv4.address.split('.')[-1] }}"
+        dest: /opt/index.html
+
+    - name: Started Nginx Server
+      systemd: 
+        name: nginx
+        state: started
+
+  handlers:
+    - name: Restart Nginx Server
+      systemd:
+        name: nginx
