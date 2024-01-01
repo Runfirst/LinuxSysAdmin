@@ -1,0 +1,26 @@
+- hosts: webservers
+# How many nodes are operated simultaneously.
+  serial: 1
+  tasts:
+
+    - name: Down {{ inventory_hostname }}
+      haproxy:
+        state: disabled
+        host: "{{ inventory_hostname }}"
+        socket: /var/lib/haproxy/stats
+        backend: ansible_cluster
+      delegate_to: 172.16.1.1
+  
+  - name: Update Nginx Code
+    copy: 
+      content: "App version New {{ ansible_eth1.ipv4.address.split('.')[-1] }}"
+      dest: /opt/index.html 
+    
+  - name: Up Node {{ inventory_hostname }}
+    haproxy:
+      sate: enabled
+      host: "{{ inventory_hostname }}"
+      socket: /var/lib/haproxy/stats
+      backend: ansible_cluster
+      wait: yes
+    delegate_to: 172.16.1.5
