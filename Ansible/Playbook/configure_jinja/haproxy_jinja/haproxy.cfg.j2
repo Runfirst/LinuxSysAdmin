@@ -57,7 +57,7 @@ listen haproxy-stats
         stats   admin if TRUE
 
 frontend web
-        bind *:8789
+        bind *:{{ ha_port }}
         mode http 
 
         acl ansible_domain hdr_reg(host) -i ha.oldxu.net 
@@ -65,6 +65,9 @@ frontend web
 
 backend ansible_cluster
         balance roundrobin
-        server 172.16.1.6 172.16.1.6:80 check port 80 inter 3s rise 2 fall
-        server 172.16.1.7 172.16.1.7:80 check prot 80 inter 3s rise 2 fall 3
-        server 172.16.1.8 172.16.1.8:80 check port 80 inter 3s rise 2 fall 3
+
+        {% for host in groups['webservers'] %}
+            server {{ host }} {{ host }}:{{ ha_node_port }} check port {{ ha_node_port }} inter 3s rise 2 fall 3
+        {% endfor %}
+
+        
