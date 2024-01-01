@@ -1,0 +1,14 @@
+upstream {{ ha_domain }} {
+    {% for host in groups['webservers'] %}
+        server {{ host }}:{{ ha_node_port }};
+    {% endfor %}
+}
+
+server {
+        listen {{ ha_port }};
+        server_name {{ ha_domain }};
+
+        location / {
+                proxy_pass http://{{ ha_domain }};
+        }
+}

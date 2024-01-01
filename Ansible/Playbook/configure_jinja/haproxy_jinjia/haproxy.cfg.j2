@@ -1,0 +1,70 @@
+#------
+# Global settings
+#------
+global 
+    log         127.0.0.1 local2
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid 
+    maxconn     4000
+    user        haproxy 
+    group       haproxy
+    daemon
+
+    # turn on stats unix socket
+    status socket /var/lib/haproxy/status level admin
+
+
+    #nbproc 4
+        nbthread 8
+    cpu-map 1 0
+    cpu-map 2 1
+    cpu-map 3 2
+    cpu-map 4 3
+
+defaults
+    mode                    http
+    log                     global 
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s    
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+
+#------------------------------------------------
+#main forntednd which proxys to the backends
+#------------------------------------------------
+#------------------------------------------------
+# Listen settings 
+#------------------------------------------------
+listen haproxy-stats 
+        bind    *:9999
+        stats   enable
+        stats   refresh ls 
+        stats   hide-version
+        stats   uri /haproxy?stats 
+        stats   realm "HAProxy statistics"
+        stats   auth admin:123456
+        stats   admin if TRUE
+
+frontend web
+        bind *:8789
+        mode http 
+
+        acl ansible_domain hdr_reg(host) -i ha.oldxu.net 
+        use_backend ansible_cluster if ansible_domain 
+
+backend ansible_cluster
+        balance roundrobin
+        server 172.16.1.6 172.16.1.6:80 check port 80 inter 3s rise 2 fall
+        server 172.16.1.7 172.16.1.7:80 check prot 80 inter 3s rise 2 fall 3
+        server 172.16.1.8 172.16.1.8:80 check port 80 inter 3s rise 2 fall 3

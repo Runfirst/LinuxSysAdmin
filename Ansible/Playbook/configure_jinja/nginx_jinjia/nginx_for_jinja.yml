@@ -1,0 +1,11 @@
+- hosts: webservers
+  vars:
+    - ha_domain: ha.oldxu.net
+    - ha_port: 80
+    - ha_node_port: 80
+  tasks:
+
+    - name: copy
+      template:
+        src: ./nginx.conf.j2
+        dest: /tmp/nginx.conf
