@@ -1,0 +1,8 @@
+- hosts: lbservers
+
+  tasks:
+
+    - name: copy
+      template:
+        src: ./keepalived.conf.j2
+        dest: /tmp/keepalived.conf
