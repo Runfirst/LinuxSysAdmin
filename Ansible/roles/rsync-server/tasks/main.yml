@@ -1,0 +1,41 @@
+- name: Installed Rsync Server
+  yum:
+    name: rsync
+    state: present
+
+- name: Configure Rsync Server
+  template:
+    src: rsyncd.conf.j2
+    dest: /etc/rsyncd.conf
+  notify: Restart Rsync Server
+
+- name: Create Group
+  group: 
+    name: "{{ rsync_group }}"
+
+- name: Create User
+  user:
+    name: "{{ rysnc_user }}"
+
+- name: 
+  copy: 
+    content: "{{ rsync_virtual_user }}:redhat"
+    dest: /etc/rsync.passwd
+    owner: root
+    group: root
+    mode: "0600"
+
+- name: Rsync Module Path
+  file:
+    path: "/{{ rsync_module_name }}"
+    state: directory
+    owner: "{{ rysnc_user }}"
+    group: "{{ rsync_group }}"
+    mode: "0755"
+    recurse: yes 
+
+- name: Started Rsync Server
+  systemd:
+    name: rsyncd
+    state: started
+    enabled: yes 

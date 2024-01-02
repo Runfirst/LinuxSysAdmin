@@ -1,0 +1,19 @@
+# nfs_vars
+
+nfs_share_dir: /roles
+nfs_share_ip_range: 172.16.1.0/24
+nfs_uid: 9876 
+nfs_gid: 9876
+#nfs_share_dir
+nfs_user: roles_nfs
+nfs_group: roles_nfs
+
+# rsync_vars
+rsync_user: ansible_rsync
+rsync_group: ansible_rsync
+rsync_port: 873
+rsync_connection_max: 3000
+rsync_virtual_user: ansible_rsync_backup
+rsync_virtual_path: /etc/rsync.passwd
+rsync_module_name: ansible_backup
+

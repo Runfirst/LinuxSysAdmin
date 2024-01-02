@@ -1,0 +1,5 @@
+- hosts: webservers
+  roles:
+    - role: nfs-server
+    - role: rsync_server
+    

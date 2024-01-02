@@ -1,0 +1,17 @@
+uid = {{ rsync_user }}
+gid = {{ rsync_group }}
+port = {{ rsync_port }}
+fake super = yes
+use chroot = no
+max connections = {{ rsync_connection_max }}
+timeout = 600
+# ignore errors
+read only = false
+list = false
+auth users = {{ rsync_virtual_user }}
+secrets file = {{ rsync_virtual_path }}
+log file = /var/log/rsyncd.log
+#####################################
+[{{ rsync_module_name }}]
+path = /{{ rsync_module_name }}
+

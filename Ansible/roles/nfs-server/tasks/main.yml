@@ -1,0 +1,37 @@
+- name: Install NFS Server
+  yum:
+    name: nfs-utils
+    state: present
+
+- name: Configure NFS Server
+  templates: 
+    src: export.j2
+    dest: /etc/exports
+  notify: Restart NFS Server
+
+- name: Create Group
+  group:
+    name: "{{ nfs_group }}"
+    gid: "{{ nfs_gid }}"
+
+- name: Create User
+  user:
+    name: "{{ nfs_user }}"
+    uid: "{{ nfs_uid }}"
+    group: "{{ nfs_group }}"
+
+- name: Create NFS Share Directory
+  file: 
+    path: "{{ nfs_share_dir }}"
+    state: directory
+    owner: "{{ nfs_user }}"
+    group: "{{ nfs_group }}"
+    recurse: yes
+
+
+- name: Start NFS Server
+  systemd: 
+    name: nfs 
+    state: started
+    enabled: yes
+
