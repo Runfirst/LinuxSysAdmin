@@ -1,0 +1,12 @@
+- name: Create Group User
+  group: 
+    name: "{{ all_group }}"
+    gid: "{{ all_gid }}"
+
+- name: Create User
+  user:
+    name: "{{ all_user }}"
+    uid: "{{ all_uid }}"
+    group: "{{ all_group }}"
+    create_home: no
+    shell: /sbin/nologin

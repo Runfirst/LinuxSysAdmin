@@ -1,0 +1,9 @@
+- name: Disables Selinux Firewall
+  selinux:
+    state: disabled
+
+- name: Disabled Firewalld
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no 

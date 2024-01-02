@@ -1,0 +1,28 @@
+- name: Add Base Yum Repository
+  yum_repository:
+    name: base
+    description: Base Aliyum Repository
+    baseurl: http://mirrors.aliyum.com/centos/$releasever/os/$basearch/
+    gpecheck: yes 
+    gpgkey: http://mirrors.aliyun.com/centos/RPM-GPG-KEY-Centos-7
+
+- name: Add Epel Yum Repository
+  yum_repository:
+    name: epel
+    description: Epel Aliyum Repository
+    baseurl: http://mirrors.aliyum.com/epel/7/$basearch
+    gpecheck: no 
+
+- name: Add Nginx Yum Repository
+  yum_repository:
+    name: nginx
+    description: Nginx Repository
+    baseurl: http://mirrors.aliyum.com/centos/7/$basearch/
+    gpecheck: no  
+
+- name: Add PHP Yum Repository
+  yum_repository:
+    name: php71w
+    description: php Repository
+    baseurl: http://us-east.repo.webtatic.com/yum/el7/x86_64
+    gpecheck: no 

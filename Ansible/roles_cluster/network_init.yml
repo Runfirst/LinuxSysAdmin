@@ -1,0 +1,28 @@
+- hosts: all:!dnsservers!routes
+  tasks:
+    - name: Delete Gateway
+      lineinfile:
+        path: /etc/sysconfig/network-scripts/ifcfg-eth1
+        regexp: '^GATEWAY='
+        state: absent
+
+    - name: Delete DNS
+      lineinfile:
+        path: /etc/sysconfig/network-scripts/ifcfg-eth1
+        regexp: '^DNS*'
+        state: absent
+
+    - name: Add Gateway
+      lineinfile:
+        path: /etc/sysconfig/network-scripts/ifcfg-eth1
+        line: "GATEWAY=172.16.1.200"
+
+    - name: Add Gateway
+      lineinfile:
+        path: /etc/sysconfig/network-scripts/ifcfg-eth1
+        line: "GATEWAY=223.5.5.5"
+
+    - name: Restart Network
+      systemd: 
+        name: network
+        state: restarted
