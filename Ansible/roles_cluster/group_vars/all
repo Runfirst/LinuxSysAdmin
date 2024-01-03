@@ -4,3 +4,8 @@ all_group: www
 all_user: www
 all_uid: 666
 all_gid: 666
+
+#nfs
+nfs_share_zrlog: /data/zrlog
+nsf_share_blog: /data/blog
+nfs_allow_ip: 172.16.1.0/24

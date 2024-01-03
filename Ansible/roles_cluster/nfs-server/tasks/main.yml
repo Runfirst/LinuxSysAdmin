@@ -1,0 +1,27 @@
+# Already installed in Roles_base
+- name: Configure NFS Server
+  template:
+    src: exports.j2
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart NFS Server
+
+- name: Create NFS dir
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ all_usr }}"
+    group: "{{ all_group }}"
+    mode: "0755"
+    recurse: yes
+  loop:
+    - "{{ nfs_share_blog }}"
+    - "{{ nfs_share_zrlog }}"
+
+
+- name: Start NFS Servre
+  systemd:
+    name: nfs
+    state: started
