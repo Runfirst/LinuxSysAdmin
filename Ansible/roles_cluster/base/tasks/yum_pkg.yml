@@ -1,6 +1,6 @@
 - name: Installed Packages All
   yum:
-    name: {{ item }}
+    name: "{{ item }}"
     state: present
   loop:
     - rsync

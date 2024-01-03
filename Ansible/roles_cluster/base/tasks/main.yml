@@ -1,0 +1,14 @@
+- name: firewalld
+  include: firewall.yml
+
+- name: Kernel Parameters
+  include: kernel.yml
+
+- name: limits
+  include: limits.yml
+
+- name: user
+  include: yum_repository.yml
+
+- name: yum packages
+  include: yum_pkg.yml

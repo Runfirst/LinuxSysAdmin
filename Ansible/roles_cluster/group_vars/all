@@ -1,1 +1,6 @@
 #various
+#base
+all_group: www
+all_user: www
+all_uid: 666
+all_gid: 666
