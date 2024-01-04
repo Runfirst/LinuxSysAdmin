@@ -1,0 +1,27 @@
+- name: Installed Mariadb
+  yum: 
+    name:'{{ item }}'
+    state: present
+  loop:
+    - mariadb-server
+    - mariadb
+
+- name: Start Mariadb Server
+  systemd:
+    name: mariadb
+    state: started
+    enabled: yes
+
+- name: Remove all anonymous user accounts
+  mysql_user:
+    name: ''
+    host_all: yes 
+    state: absent
+
+- name: Create Super User {{ mysql_super_user }}
+  mysql_user:
+    name: "{{ mysql_super_user }}"
+    password: "{{ mysql_super_pass }}"
+    priv: "{{ mysql_super_user_priv }}"
+    host: "{{ mysql_allow_ip }}"
+    state: present

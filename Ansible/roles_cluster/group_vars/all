@@ -9,3 +9,11 @@ all_gid: 666
 nfs_share_zrlog: /data/zrlog
 nsf_share_blog: /data/blog
 nfs_allow_ip: 172.16.1.0/24
+
+# Mysql
+mysql_super_user: ansible_app
+mysql_super_pass: oldxu.net123
+mysql_super_user_priv: '*.*:ALL'
+mysql_allow_ip: '172.16.1.%'
+
+
