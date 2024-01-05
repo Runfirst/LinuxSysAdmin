@@ -1,0 +1,23 @@
+- name: Installed Redis Server
+  yum:
+    name: redis
+    state: present
+
+- name: Configure Redis Server
+  templates:
+    src: redis.conf.j2
+    desk: /etc/redis.conf
+    owner: redis
+    group: redis
+    mode:0640
+  notify: Restart Redisl
+
+  notify: Restart Redis server
+
+- name: Start Redis Server
+  systemd:
+    name: redis
+    state: started
+    enable: yes
+
+

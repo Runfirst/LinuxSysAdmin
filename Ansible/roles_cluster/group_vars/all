@@ -16,4 +16,7 @@ mysql_super_pass: oldxu.net123
 mysql_super_user_priv: '*.*:ALL'
 mysql_allow_ip: '172.16.1.%'
 
-
+# Nginx
+nginx_conf_path: /etc/nginx/nginx.conf
+nginx_include_dir: /etc/nginx/conf.d
+nginx_include_path: /etc/nginx/conf.d/*.conf

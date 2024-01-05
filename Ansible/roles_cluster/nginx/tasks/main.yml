@@ -1,0 +1,16 @@
+- name: Install Nginx Server
+  yum:
+    name: nginx 
+    enablerepo: nginx
+    state: present
+
+- name: Configure Nginx server
+  template:
+    src: nginx.conf.j2
+    dest: "{{ nginx_conf_path }}"
+  notify: Restart Nginx Server
+
+- name: Start Nginx Server
+  systemd: 
+    name: nginx
+    state: started
