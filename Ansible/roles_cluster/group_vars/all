@@ -20,3 +20,17 @@ mysql_allow_ip: '172.16.1.%'
 nginx_conf_path: /etc/nginx/nginx.conf
 nginx_include_dir: /etc/nginx/conf.d
 nginx_include_path: /etc/nginx/conf.d/*.conf
+
+#PHP
+
+php_ini_path: /etc/php.ini
+php_fpm_path: /etc/php-fpm.d/www.conf
+
+session_menthod: redis
+session_redis_path: "tcp://172.16.1.41:6379?weight=1&timeout=2.5"
+
+fpm_max_process: 50
+fpm_start_process: 10
+fpm_min_spare_servers: 10 
+fpm_max_spare_servers: 50
+

@@ -1,0 +1,15 @@
+[www]
+
+user = {{ all_user }}
+group = {{ all_group }}
+listen = 127.0.0.1:9000
+listen.allowed_clients = 127.0.0.1
+pm = dynamic
+pm.max_children = {{ fpm_max_process }}
+pm.start_servers = {{ fpm_start_process }}
+pm.min_spare_servers = {{ fpm_min_spare_servers }}
+pm.max_spare_servers = {{ fpm_max_spare_servers }}
+slowlog = /var/log/php-fpm/www-slow.log 
+php_admin_value[error_log] = /var/log/php-fpm/www-error.log
+php_admin_flag[log_errors] = on;
+php_value[soap.wsdl_cache_dir] = /var/lib/php/wsdlcache 

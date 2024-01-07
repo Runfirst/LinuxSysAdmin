@@ -1,0 +1,4 @@
+- name: Reatart PHP Server
+  systemd:
+    name: php-fpm
+    state: restarted

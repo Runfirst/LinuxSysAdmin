@@ -1,6 +1,7 @@
 - name: Install PHP-FPM Server
   yum:
     name: "{{ item }}"
+    enablerepo: php71w
     state: present
   loop:
     - php71w
@@ -24,5 +25,12 @@
     src: "{{ itme.src }}"
     dest: "{{ item.dest }}"
   loop:
-    - { src: php.ini.j2, dest: /etc/php.ini }
-    - { src: fpm-www.conf.j2, dest: /etc/php-fpm.d/www.conf }
+    - { src: php.ini.j2, dest: "{{ php_ini_path }}" }
+    - { src: fpm-www.conf.j2, dest: "{{ php_fpm_path }}" }
+  notify: Reatart PHP Server
+
+- name: Start PHP-FPM Server
+  systemd: 
+    name: php-fpm
+    state: started
+    enabled: yes
