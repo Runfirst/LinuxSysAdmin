@@ -1,0 +1,28 @@
+- name: Install PHP-FPM Server
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - php71w
+    - php71w-cli
+    - php71w-common
+    - php71w-devel
+    - php71w-embedded
+    - php71w-gd
+    - php71w-mcrpt
+    - php71w-mbstring
+    - php71w-pdo
+    - php71w-xml
+    - php71w-fpm
+    - php71w-mysqlnd
+    - php71w-opcache
+    - php71w-pecl-memcached
+    - php71w-pecl-redis
+
+- name: Configure PHP php.ini php-fpm
+  template:
+    src: "{{ itme.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - { src: php.ini.j2, dest: /etc/php.ini }
+    - { src: fpm-www.conf.j2, dest: /etc/php-fpm.d/www.conf }
