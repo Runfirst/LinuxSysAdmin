@@ -26,3 +26,12 @@
     description: php Repository
     baseurl: http://us-east.repo.webtatic.com/yum/el7/x86_64
     gpecheck: no 
+
+- name: Add PHP Yum Repository
+  yum_repository:
+    name: haproxy
+    description: haproxy Repository
+    baseurl: https://repo.ius.io/archive/7/$basearch/
+    gpecheck: yes
+    gpgkey: https://repo.ius.io/RPM-GPG-KEY-IUS-7
+    

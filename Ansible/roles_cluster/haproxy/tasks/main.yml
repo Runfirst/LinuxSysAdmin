@@ -1,0 +1,19 @@
+- name: Install haproxy Server
+  yum:
+    name: haproxy22
+    enablerepo: haproxy
+    state: present
+
+- name: Configure Haproxy Server
+  templates:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+  notify: Restart Haproxy Server
+
+- name: Change Service
+
+- name: Start Haproxy Server
+  systemed:
+    name: haproxy
+    state: started
+    enabled: yes
