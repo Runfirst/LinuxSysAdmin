@@ -34,3 +34,5 @@ fpm_start_process: 10
 fpm_min_spare_servers: 10 
 fpm_max_spare_servers: 50
 
+#haproxy
+haproxy_include_path: /etc/haproxy/conf.d/

@@ -5,15 +5,37 @@
     state: present
 
 - name: Configure Haproxy Server
-  templates:
+  template:
     src: haproxy.cfg.j2
     dest: /etc/haproxy/haproxy.cfg
   notify: Restart Haproxy Server
 
-- name: Change Service
+- name: Create Haproxy Include Dir
+  file: 
+    path: "{{ haproxy_include_path }}"
+    state: directory
+
+- name: Change Service Configure ExecStart
+  lineinfile:
+    path: /usr/lib/systemd/system/haproxy.service
+    insertafter: '^\[Service\]'
+    line: 'Environment="CONFIG_D={{ haproxy_include_path }}"'
+
+- name: Change Service Configure ExecStart
+  lineinfile: 
+    path: /usr/lib/systemd/system/haproxy.service
+    regexp: '^ExecStart'
+    line: 'ExecStart=/usr/sbin/haproxy -f $CONFIG -f $CONFIG_D -c -q $DPTIONS'
+
+- name: Change Service Configure ExecStartPre
+  lineinfile: 
+    path: /usr/lib/systemd/system/haproxy.service
+    regexp: '^ExecStartPre='
+    line: 'ExecStartPre=/usr/sbin/haproxy -f $CONFIG -f $CONFIG_D -c -q $DPTIONS'
 
 - name: Start Haproxy Server
   systemed:
     name: haproxy
     state: started
+    daemon_reload: yes
     enabled: yes
