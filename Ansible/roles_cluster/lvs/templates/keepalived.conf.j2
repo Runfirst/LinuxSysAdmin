@@ -1,0 +1,72 @@
+global_defs {
+    router_id {{ ansible_hostname }}
+}
+
+
+vrrp_instance VI_1 {
+
+{% if ansible_hostname == "lvs01" %}
+    state:  MASTER
+    priority 200
+{%elif ansible_hostname == "lvs02}
+    state BACKU
+{% endif %}
+
+    interface eth1
+    virtual_router_id 49
+    priority 100
+    advert_int 3
+
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+
+    virtual_ipaddress {
+        {{ lvs_vip }}
+    }
+}
+
+
+# Http
+virtual_server {{ lvs_vip }} {{ lvs_port_http }} {
+    delay_loop 6
+    lb_algo rr 
+    lb_kind DR
+    protocol TCP
+
+    {% for host in group['proxyservers'] %}
+ 
+    real_server {{ host }} {{ lvs_port_http }} {
+        weight 1
+        TCP_CHECK {
+            connect_port 80
+            connect_timeout 3
+            nb_get_retry 2
+            delay_beeforce_retry 3
+        }
+    }
+    {% endfor %}
+
+# Https
+virtual_server {{ lvs_vip }} {{ lvs_port_https }} {
+    delay_loop 6
+    lb_algo rr 
+    lb_kind DR
+    protocol TCP
+
+{% for host in group['proxyservers'] %}
+ 
+    real_server {{ host }} {{ lvs_port_http }} {
+        weight 1
+        TCP_CHECK {
+            connect_port 80
+            connect_timeout 3
+            nb_get_retry 2
+            delay_beeforce_retry 3
+        }
+    }
+{% endfor %}
+
+
+}

@@ -1,0 +1,25 @@
+- name: Configure VIP lo:0
+  template: 
+    src: ifcfg-lo0.j2
+    dest: /etc/sysconfig/network-scripts/ifcfg-{{ lvs_rs_network }}
+  notify: Restart Network
+
+- name: Configure Arp_Ignore
+  sysctl:
+    name: "{{ item }}"
+    value: '1'
+    sysctl_set: yes
+  loop:
+    - net.ipv4.conf.default.arp_ignore
+    - net.ipv4.conf.all.arp_ignore
+    - net.ipv4.conf.lo.arp_ignore
+
+- name: Configure Arp_Announce
+  sysctl:
+    name: "{{ item }}"
+    value: '2'
+    sysctl_set: yes 
+  loop:
+    - net.ipv4.conf.default.arp_announce
+    - net.ipv4.conf.all.arp_announce
+    - net.ipv4.conf.lo.arp_announce

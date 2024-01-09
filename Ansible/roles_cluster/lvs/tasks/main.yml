@@ -1,0 +1,16 @@
+- name: Install Ipvsadm Packages
+  yum: 
+    name: ipvsadm
+    state: present
+
+- name: Configure LVS Keepalived
+  template:
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+  notify: Restart Keepalived Server
+
+- name: Start LVS Keepalived
+  systemd:
+    name: keepalied
+    state: started
+    enabled: yes
