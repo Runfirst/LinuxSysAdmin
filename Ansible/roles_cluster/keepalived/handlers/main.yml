@@ -1,0 +1,7 @@
+- name: Restart Keepalived Server
+  systemd:
+    name: keepalived
+    state: restarted
+
+
+    

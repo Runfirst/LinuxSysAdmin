@@ -36,3 +36,4 @@ fpm_max_spare_servers: 50
 
 #haproxy
 haproxy_include_path: /etc/haproxy/conf.d/
+proxy_vip: 172.16.1.100
