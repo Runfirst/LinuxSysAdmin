@@ -1,0 +1,60 @@
+options {
+        listen-on port 53 { any; };
+        directory           "/var/named";
+        dump-file           "/var/named/data/named_dump.db";
+        statistics-file     "/var/named/data/named_stats.txt";
+        memstatistics-file  "/var/named/data/named_mem_stats.txt";
+        recursing-file      "/var/named/data/named.recursing";
+        secroots-file       "/var/named/data/named.secroots";
+        allow-query         { any; };
+
+
+{% if ansible_hostname == "dns-master" %}
+        allow-transfer {172.16.1.92;};
+        also-notify {172.16.1.92;};
+        
+{% esif ansible_hostname == "dns-slave" %}
+        masterfile-format text;
+{% endif %}
+        recursion yes;
+        dnssec-enable yes;
+        dnssec-validation yes;
+        bindkeys-file "/etc/named/dynamic";
+        pid-file "run/named/named.pid";
+        session-keyfile "/run/named/session.key";
+};
+
+logging {
+        channel default_debug {
+                file "data/named.run";
+                severity dynamic;
+
+        };
+
+};
+
+    zone "." IN {
+            tpye hint;
+            file "named.ca";
+
+    };
+
+{% if ansible_hostname == "dns-master" %}
+        zone "oldxu.net" IN {
+
+        type master;
+        file "oldxu.net.zone";
+    };
+        
+{% esif ansible_hostname == "dns-slave" %}
+        zone "oldxu.net" IN {
+        type slave;
+        file "slaves/oldxu.net.zone";
+        masters { {{ dns_master_ip }}; };
+        };
+{% endif %}
+
+
+
+include "/etc/named.rfc1912.zone"
+include "etc/named.root.key"

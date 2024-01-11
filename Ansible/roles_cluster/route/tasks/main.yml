@@ -1,0 +1,27 @@
+- name: Iptables SNAT Share Network
+  iptables: 
+    table: nat
+    chain: POSTROUTING
+    source: 172.16.1.0/24
+    jump: SNAT
+    to_source: "{{ ansible_eth0.ipv4.address }}"
+
+- name: Iptables DNAT Http 80 port
+  iptables: 
+    table: nat 
+    chain: PREROUTING
+    protocol: tcp
+    destination: "{{ ansible_eth0.ipv4.address }}"
+    destination_port: '{{ lvs_port_http }}'
+    jump: DNAT
+    to_destination: "{{ lvs_vip }}:{{ lvs_port_http }}"
+
+- name: Iptables DNAT Http 443 port
+  iptables: 
+    table: nat 
+    chain: PREROUTING
+    protocol: tcp
+    destination: "{{ ansible_eth0.ipv4.address }}"
+    destination_port: '{{ lvs_port_https }}'
+    jump: DNAT
+    to_destination: "{{ lvs_vip }}:{{ lvs_port_https }}"

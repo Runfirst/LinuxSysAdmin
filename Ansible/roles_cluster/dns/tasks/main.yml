@@ -1,0 +1,28 @@
+- name: Install Bind Server
+  yum: 
+    name: "{{ item }}"
+    state: present
+  loop:
+    - bind-utils
+    - bind
+
+- name: Configure name.conf
+  template:
+    src: named.conf.j2
+    dest: /etc/named.conf
+    owner: root
+    group: named
+    mode: '0640'
+  notify: Restart Bind Server
+
+- name: Configure oldxu.net zone
+  template:
+    src: oldxu.net.zone.j2
+    dest: "{{ dns_zone_path }}/oldxu.net.zone"
+  notify: Restart Bind Server
+
+- name: Start BIND Server
+  systemd:
+    name: named
+    state: started
+    enabled: yes

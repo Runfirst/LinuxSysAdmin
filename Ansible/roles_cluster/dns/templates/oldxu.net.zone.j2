@@ -1,0 +1,20 @@
+STTL 600;
+
+oldxu.net.      IN      SOA     ns.oldxu.net.   qq.oldxu.net.   (
+        20220105
+        1800
+        900
+        604800
+        86400
+)
+
+
+oldxu.net.      IN      NS      ns1.oldxu.net 
+oldxu.net.      IN      NS      ns2.oldxu.net.
+
+
+
+ns1.oldxu.net.  IN      A       {{ dns_master_ip }}
+ns2.oldxu.net.  IN      A       {{ dns_slave_ip }}
+
+www.oldxu.net.  IN      A       1.1.1.1

@@ -45,3 +45,9 @@ lvs_port_http: 80
 lvs_port_https: 443
 lvs_rs_network: lo:0
 
+# dns
+
+dns_master_ip: 172.16.1.91
+dns_slave_ip: 172.16.1.92
+dns_zone_path: /var/named
+oldxu_net_zone_name: oldxu.net.zone
