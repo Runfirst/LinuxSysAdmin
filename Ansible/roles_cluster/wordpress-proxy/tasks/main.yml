@@ -1,0 +1,6 @@
+- name: Wrodpress Haproxy Configure
+  template:
+    src: wordpress.cfg.j2
+    dest: "{{ haproxy_include_path }}/wordpress.cfg"
+  notify: Restart Haproxy Server
+
