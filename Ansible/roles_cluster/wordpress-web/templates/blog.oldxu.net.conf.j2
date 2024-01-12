@@ -1,0 +1,18 @@
+
+server {
+
+        listen {{ word_http_port }};
+        server_name: {{ word_domain }};
+        root {{ word_code_path }};
+
+        location / {
+                index index.php;
+        }
+
+        location ~ \.php$ {
+                fastcgi_pass 127.0.0.1:9000;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_param HTTPS {{ fastcgi_https }};
+                include fastcgi_params;
+        }
+}

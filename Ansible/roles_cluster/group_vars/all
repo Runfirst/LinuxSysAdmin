@@ -51,3 +51,11 @@ dns_master_ip: 172.16.1.91
 dns_slave_ip: 172.16.1.92
 dns_zone_path: /var/named
 oldxu_net_zone_name: oldxu.net.zone
+
+# wordpress
+
+word_domain: wordpress.oldxu.net
+word_http_port: 80
+word_code_path: /code/wordpress
+word_nginx_name: blog.oldxu.net.conf
+fastcgi_https: off

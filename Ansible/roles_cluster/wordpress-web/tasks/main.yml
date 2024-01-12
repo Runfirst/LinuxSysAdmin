@@ -1,0 +1,36 @@
+- name: Create Wordpress Configure
+  template:
+    src: blog.oldxu.net.conf.j2
+    dest: "{{ nginx_include_dir }}/{{ word_nginx_name }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart Nginx Server
+
+- name: Create Code Directory
+  file:
+    path: "{{ word_code_path }}"
+    state: directory
+    owner: "{{ all_user }}"
+    group: "{{ all_group }}"
+    recurse: yes
+
+
+- name: Import Wordpress Code
+  unarchive:
+    src: wordpress.tar.gz
+    dest: "{{ word_code_path }}"
+    owner: "{{ all_user }}"
+    group: "{{ all_group }}"
+    recurse: yes 
+
+
+- name: Import Wordpress Sql
+  mysql_db:
+    name: wordpress
+    state: import
+    target: wordpress.sql
+  delegate_to: 172.16.1.51
+  
+
+ 
