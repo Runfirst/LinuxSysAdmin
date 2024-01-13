@@ -1,0 +1,36 @@
+- hosts: all
+  roles: 
+    - role: base
+
+- hosts: nfsservers
+  roles:
+    - role: nfs-server
+
+- hosts: dbservers
+  roles: 
+    - role: mariadb
+
+- hosts: redisservers
+  roles:
+    - role: redis
+
+- hosts: webservers
+  roles:
+    - role: wordpress-web
+
+- hosts: proxyservers
+  roles:
+    - role: lvs-devel
+    - role: wordpress-proxy
+
+- hosts: lbservers
+  roles:
+    - role: lvs
+
+- hosts: routes
+  roles: 
+    - role: route
+
+- hosts: dnsservers
+  roles:
+    - role: dns
